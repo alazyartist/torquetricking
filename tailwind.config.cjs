@@ -2,7 +2,13 @@
 module.exports = {
   content: ["./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        inter: ["Inter"],
+        virgil: ["Virgil"],
+        titan: ["Titan One"],
+      },
+    },
   },
   plugins: [],
 };
