@@ -27,6 +27,9 @@ const Home: NextPage = () => {
         <a href={"https://trickedex.app"}>
           <span className="font-titan text-3xl text-zinc-300"> Trickedex</span>
         </a>
+        <Link href={"account"}>
+          <span className="font-titan text-3xl text-zinc-300"> Account</span>
+        </Link>
         <div className="flex w-full items-center justify-center pt-6 text-2xl text-blue-500">
           {hello.data ? <p>{hello.data.greeting}</p> : <p>Loading..</p>}
         </div>
@@ -54,7 +57,9 @@ const AuthShowcase: React.FC = () => {
         <p className="text-2xl text-blue-500">{secretMessage}</p>
       )}
       <button
-        className="absolute bottom-5 left-5 rounded-md border border-black bg-violet-50 px-4 py-2 text-xl shadow-lg hover:bg-violet-100"
+        className={`absolute bottom-5 left-5 rounded-md border border-black bg-violet-50  ${
+          sessionData ? "text-2xs px-2 py-1" : "px-4 py-2 text-xl"
+        } shadow-lg hover:bg-violet-100`}
         onClick={sessionData ? () => signOut() : () => signIn()}
       >
         {sessionData ? "Sign out" : "Sign in"}
