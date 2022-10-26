@@ -7,4 +7,8 @@
     font-family: "Virgil";
     src: url("https://excalidraw.com/Virgil.woff2");
   }
+  .text-2xs {
+    font-size: 0.5rem /* 8px */;
+    line-height: 0.75rem /* 12px */;
+  }
 }
