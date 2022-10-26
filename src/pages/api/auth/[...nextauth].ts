@@ -6,7 +6,10 @@ import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { prisma } from "../../../server/db/client";
 import { env } from "../../../env/server.mjs";
 import Email from "next-auth/providers/email";
-import { myAccessToken } from "../../../utils/nodemailer";
+import {
+  myAccessToken,
+  sendVerificationRequest,
+} from "../../../utils/nodemailer";
 
 export const authOptions: NextAuthOptions = {
   // Include user.id on session
@@ -27,6 +30,7 @@ export const authOptions: NextAuthOptions = {
     // }),
     // ...add more providers here
     Email({
+      from: "torquetricking@gmail.com",
       server: {
         host: "smtp.gmail.com",
         port: 465,
@@ -38,6 +42,9 @@ export const authOptions: NextAuthOptions = {
           refreshToken: env.GMAIL_REFRESH_TOKEN,
           accessToken: myAccessToken,
         },
+      },
+      sendVerificationRequest({ identifier, url, provider }) {
+        sendVerificationRequest({ identifier, url, provider });
       },
     }),
   ],
