@@ -5,6 +5,8 @@ import DiscordProvider from "next-auth/providers/discord";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { prisma } from "../../../server/db/client";
 import { env } from "../../../env/server.mjs";
+import Email from "next-auth/providers/email";
+import { myAccessToken } from "../../../utils/nodemailer";
 
 export const authOptions: NextAuthOptions = {
   // Include user.id on session
@@ -19,11 +21,25 @@ export const authOptions: NextAuthOptions = {
   // Configure one or more authentication providers
   adapter: PrismaAdapter(prisma),
   providers: [
-    DiscordProvider({
-      clientId: env.DISCORD_CLIENT_ID,
-      clientSecret: env.DISCORD_CLIENT_SECRET,
-    }),
+    // DiscordProvider({
+    //   clientId: env.DISCORD_CLIENT_ID,
+    //   clientSecret: env.DISCORD_CLIENT_SECRET,
+    // }),
     // ...add more providers here
+    Email({
+      server: {
+        host: "smtp.gmail.com",
+        port: 465,
+        auth: {
+          type: "OAUTH2",
+          user: "torquetricking@gmail.com",
+          clientId: env.GMAIL_CLIENT_ID,
+          clientSecret: env.GMAIL_CLIENT_SECRET,
+          refreshToken: env.GMAIL_REFRESH_TOKEN,
+          accessToken: myAccessToken,
+        },
+      },
+    }),
   ],
 };
 

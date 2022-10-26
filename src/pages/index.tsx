@@ -27,7 +27,9 @@ const Home: NextPage = () => {
         <h1 className="font-inter text-5xl font-black leading-normal text-gray-700 md:text-[5rem]">
           Torque <span className="text-cyan-500">Tricking</span>
         </h1>
-        <p className="text-2xl text-gray-700">This stack uses:</p>
+        <p className="text-2xl text-gray-700">
+          Welcome to our work in progress:
+        </p>
 
         <div className="flex w-full items-center justify-center pt-6 text-2xl text-blue-500">
           {hello.data ? <p>{hello.data.greeting}</p> : <p>Loading..</p>}
