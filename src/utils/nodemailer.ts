@@ -75,7 +75,7 @@ function html(params: { url: string; host: string; theme?: Theme }) {
     buttonBorder: brandColor,
     buttonText: theme?.buttonText || "#fff",
   };
-
+  //TODO clean up email login design
   return `
 <body style="background: ${color.background};">
   <table width="100%" border="0" cellspacing="20" cellpadding="0"
