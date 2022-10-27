@@ -21,6 +21,9 @@ const AccountPage: NextPage = () => {
           <Link href={"/"}>
             <span className="font-titan text-xl text-zinc-300">Home</span>
           </Link>
+          <Link href={"/shop"}>
+            <span className="font-titan text-xl text-zinc-300">Shop</span>
+          </Link>
           <div>{secretMessage}</div>
         </div>
       ) : (
