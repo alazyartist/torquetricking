@@ -14,4 +14,26 @@
   .no-scrollbar::--webkit-scrollbar {
     display: none;
   }
+  .bg-bighead {
+    background: linear-gradient(
+      to right,
+      #4b134f,
+      #c94b4b
+    ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  }
+  .bg-lawrenceium {
+    background: linear-gradient(
+      to right,
+      #0f0c29,
+      #302b63,
+      #24243e
+    ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  }
+  .bg-grandeur {
+    background: linear-gradient(
+      to top left,
+      #000046,
+      #1cb5e0
+    ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  }
 }

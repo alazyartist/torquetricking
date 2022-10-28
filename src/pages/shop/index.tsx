@@ -11,7 +11,7 @@ const Shop: NextPage = () => {
         <meta name="description" content="torquetricking.com" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="relative mx-auto flex min-h-screen flex-col content-start items-center bg-gradient-to-t from-zinc-900 via-cyan-400 to-zinc-900 p-4 font-virgil">
+      <main className="bg-grandeur relative mx-auto flex min-h-screen flex-col content-start items-center p-4 font-virgil">
         <h1 className="font-inter text-5xl font-black leading-normal text-gray-300 md:text-[5rem]">
           Torque <span className="text-cyan-500">Store</span>
         </h1>

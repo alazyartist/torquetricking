@@ -12,7 +12,7 @@ const AccountPage: NextPage = () => {
   return (
     <>
       {session ? (
-        <div className="mx-auto flex min-h-screen flex-col content-start items-center bg-zinc-800 p-4 font-virgil">
+        <div className="bg-grandeur mx-auto flex min-h-screen flex-col content-start items-center p-4 font-virgil">
           <div className="mt-2 font-inter text-3xl font-black text-zinc-300">
             AccountPage
           </div>

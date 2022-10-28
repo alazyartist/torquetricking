@@ -6,6 +6,7 @@ import Link from "next/link";
 
 const Home: NextPage = () => {
   const hello = trpc.example.hello.useQuery({ text: "Dylan" });
+  const getAllUsers = trpc.example.getAllUsers.useQuery();
 
   return (
     <>
@@ -14,7 +15,7 @@ const Home: NextPage = () => {
         <meta name="description" content="torquetricking.com" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="relative mx-auto flex min-h-screen flex-col content-start items-center bg-zinc-800 p-4 font-virgil">
+      <main className="no-scrollbar bg-grandeur relative mx-auto flex h-screen min-h-screen flex-col content-start items-center p-4 font-virgil">
         <h1 className="font-inter text-5xl font-black leading-normal text-gray-300 md:text-[5rem]">
           Torque <span className="text-cyan-500">Tricking</span>
         </h1>
