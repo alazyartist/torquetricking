@@ -47,9 +47,8 @@ const ProductCard: React.FC<Product> = ({
           <div className="h-24 w-full rounded-md bg-zinc-900">
             <img className="h-full w-full" src={thumbnail_url} alt="item" />
           </div>
-          <div className="flex h-[1.5rem] items-center justify-around gap-2 text-xs text-zinc-300">
-            <p className="text-2xs">T-shirt</p>
-            <p>8$</p>
+          <div className="flex h-[1.5rem] w-full items-center gap-2 p-2 text-left text-xs text-zinc-300">
+            <p className="text-2xs">{name}</p>
           </div>
         </div>
       )}
@@ -64,37 +63,84 @@ interface CardOverlay {
 const CardOverlay: React.FC<CardOverlay> = ({ togglePopup, popup, id }) => {
   const { data: item } = trpc.shop.getItemsById.useQuery(id);
   console.log(item);
-  let colorRegex = /^(\w+\s)*\-|(\/\s\w+)$/gim;
-  let sizeRegex = /^(\w+\s)*\-\s(\w+\s)*\//gim;
+  let colorRegex = /^(\w+.\s)*\-|(\/\s\w+)$/gim;
+  let sizeRegex = /^(\w+.\s)*\-\s(\w+\s)*\//gim;
   const [showOptions, setShowOptions] = useState(false);
   const [color, setColor] = useState("");
+  const [colorOptions, setColorOptions] = useState<Array<string>>([]);
+  const [sizeOptions, setSizeOptions] = useState<Array<string>>([]);
+  const [variant, setVariant] = useState<SyncVariant | undefined>();
+  const [size, setSize] = useState([]);
+  useEffect(() => {
+    if (color === "") {
+      setColor(item?.sync_variants[0].name.replace(colorRegex, ""));
+    }
+    let colorSet = new Set(
+      item?.sync_variants.map((v: SyncVariant) =>
+        v.name.replace(colorRegex, "")
+      )
+    );
+    setColorOptions([...colorSet] as string[]);
+  }, [item]);
   return (
-    <div className="absolute top-10 left-10 h-[80vh] w-[80vw] bg-zinc-900 text-zinc-300">
+    <div className="absolute top-20 left-20 z-20 flex h-[80vh] w-[80vw] flex-col items-center bg-zinc-900 p-2 text-zinc-300">
       <MdClose
         className="absolute top-2 right-2 text-3xl"
         onClick={() => togglePopup(!popup)}
       />
-      {item?.sync_product.name}
-      <div onClick={() => setShowOptions(!showOptions)}>Color</div>
-      {showOptions && (
-        <div className="no-scrollbar h-[200px] w-fit overflow-x-auto">
-          {item?.sync_variants?.map((v: SyncVariant) => (
-            <div className="flex gap-2">
-              <div
-                onClick={() => setColor(v.name?.replace(colorRegex, ""))}
-                className="text-zinc-300"
-              >
-                {v.name?.replace(colorRegex, "")}
+      <h1 className="font-titan text-3xl ">{item?.sync_product.name}</h1>
+      <div className="grid grid-flow-row grid-cols-3 p-2">
+        <img
+          className="col-start-3 h-[350px] w-[350px] content-center items-center rounded-md"
+          src={
+            variant?.files[variant?.files.length - 1]?.preview_url ||
+            item?.sync_product.thumbnail_url
+          }
+          alt="item"
+        />
+        <div
+          className="relative col-start-3 flex w-full justify-between p-2 font-inter font-bold text-zinc-300"
+          onClick={() => setShowOptions(!showOptions)}
+        >
+          <div className="relative top-0 flex flex-col gap-2">
+            <h1 className="">{color || "Choose a Color"}</h1>
+            {showOptions && (
+              <div className="absolute top-0 w-[200px] rounded-lg bg-zinc-800 p-2">
+                {colorOptions.map((color) => (
+                  <div
+                    onClick={() => {
+                      setColor(color);
+                      setVariant(
+                        item.sync_variants.filter(
+                          (v: SyncVariant) =>
+                            v.name.replace(colorRegex, "") === color
+                        )[0]
+                      );
+                    }}
+                  >
+                    {color}
+                  </div>
+                ))}
               </div>
-              {color === v.name?.replace(colorRegex, "") && (
-                <div className="text-zinc-300">
-                  {v.name?.replace(sizeRegex, "")}
-                </div>
-              )}
-            </div>
-          ))}
+            )}
+          </div>
+          <h1>{variant?.retail_price}</h1>
         </div>
-      )}
+        <div className="col-start-3 grid w-fit grid-flow-row grid-cols-6 gap-2">
+          {item?.sync_variants
+            ?.filter(
+              (v: SyncVariant) => v.name.replace(colorRegex, "") === color
+            )
+            .map((v: SyncVariant) => (
+              <div
+                onClick={() => setVariant(v)}
+                className="gap-2 rounded-md bg-zinc-500 p-2 text-sm"
+              >
+                {v.name?.replace(sizeRegex, "")}
+              </div>
+            ))}
+        </div>
+      </div>
     </div>
   );
 };

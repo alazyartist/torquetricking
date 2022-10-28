@@ -1,4 +1,4 @@
-export interface Files {
+export interface File {
   id: number;
   type: string;
   hash: string;
@@ -15,7 +15,10 @@ export interface Files {
   preview_url: string;
   visible: boolean;
 }
-
+interface Options {
+  id: string;
+  value: string;
+}
 export interface SyncVariant {
   id: number;
   external_id: string;
@@ -34,32 +37,7 @@ export interface SyncVariant {
     image: string;
     name: string;
   };
-  files: Array<Files>;
-  options: [
-    {
-      id: string;
-      value: string;
-    },
-    {
-      id: string;
-      value: string;
-    },
-    {
-      id: string;
-      value: string;
-    },
-    {
-      id: string;
-      value: string;
-    },
-    {
-      id: string;
-      value: string;
-    },
-    {
-      id: string;
-      value: string;
-    }
-  ];
+  files: Array<File>;
+  options: Array<Options>;
   is_ignored: boolean;
 }
