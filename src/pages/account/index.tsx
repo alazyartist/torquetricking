@@ -2,6 +2,7 @@ import { NextPage } from "next";
 import { useSession, signIn, signOut } from "next-auth/react";
 import Link from "next/link";
 import React from "react";
+import AccountDetails from "../../components/account/AccountDetails";
 import { trpc } from "../../utils/trpc";
 
 const AccountPage: NextPage = () => {
@@ -25,6 +26,7 @@ const AccountPage: NextPage = () => {
             <span className="font-titan text-xl text-zinc-300">Shop</span>
           </Link>
           <div>{secretMessage}</div>
+          <AccountDetails user={session.user} />
         </div>
       ) : (
         <div>Login Motherfucker</div>
