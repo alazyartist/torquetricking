@@ -14,14 +14,11 @@ interface Product {
 
 const ShopDisplay: React.FC = () => {
   const { data: products } = trpc.shop.getItems.useQuery();
-  useEffect(() => {
-    console.log(products);
-  }, [products]);
+  useEffect(() => {}, [products]);
 
   return (
-    <div className="grid grid-cols-4 gap-4">
+    <div className="grid grid-cols-3 gap-4 md:grid-cols-4">
       {products?.map((product: Product) => {
-        console.log(product);
         return <ProductCard {...product} />;
       })}
     </div>
@@ -42,12 +39,16 @@ const ProductCard: React.FC<Product> = ({
         <div
           key={id}
           onClick={() => togglePopup(!popup)}
-          className="flex h-full w-24 flex-col items-center rounded-md bg-zinc-900 drop-shadow-lg "
+          className="flex h-full w-24 flex-col items-center rounded-md drop-shadow-lg hover:scale-110  "
         >
-          <div className="h-24 w-full rounded-md bg-zinc-900">
-            <img className="h-full w-full" src={thumbnail_url} alt="item" />
+          <div className="h-24 w-full bg-zinc-700  hover:bg-transparent">
+            <img
+              className="h-full w-full mix-blend-multiply"
+              src={thumbnail_url}
+              alt="item"
+            />
           </div>
-          <div className="flex h-[1.5rem] w-full items-center gap-2 p-2 text-left text-xs text-zinc-300">
+          <div className="flex h-[1.5rem] w-full items-center gap-2 rounded-b-md bg-zinc-800 p-2 text-left text-xs text-zinc-300">
             <p className="text-2xs">{name}</p>
           </div>
         </div>
@@ -83,13 +84,15 @@ const CardOverlay: React.FC<CardOverlay> = ({ togglePopup, popup, id }) => {
     setColorOptions([...colorSet] as string[]);
   }, [item]);
   return (
-    <div className="absolute top-20 left-20 z-20 flex h-[80vh] w-[80vw] flex-col items-center bg-zinc-900 p-2 text-zinc-300">
+    <div className="fixed top-10 left-10 z-20 flex h-[90vh] w-[90vw] flex-col items-center rounded-md bg-zinc-900 bg-opacity-80 p-2 text-zinc-300 drop-shadow-2xl ">
       <MdClose
-        className="absolute top-2 right-2 text-3xl"
+        className="absolute top-2 right-2 text-3xl text-zinc-300"
         onClick={() => togglePopup(!popup)}
       />
-      <h1 className="font-titan text-3xl ">{item?.sync_product.name}</h1>
-      <div className="grid grid-flow-row grid-cols-3 p-2">
+      <h1 className="font-titan text-3xl text-zinc-300 ">
+        {item?.sync_product.name}
+      </h1>
+      <div className="flex flex-col p-2 md:grid md:grid-cols-2 lg:grid-flow-row lg:grid-cols-3">
         <img
           className="col-start-3 h-[350px] w-[350px] content-center items-center rounded-md"
           src={
@@ -126,7 +129,10 @@ const CardOverlay: React.FC<CardOverlay> = ({ togglePopup, popup, id }) => {
           </div>
           <h1>{variant?.retail_price}</h1>
         </div>
-        <div className="col-start-3 grid w-fit grid-flow-row grid-cols-6 gap-2">
+        <div
+          id="sizeOptions"
+          className="col-start-3 grid w-full grid-flow-row grid-cols-6 gap-2"
+        >
           {item?.sync_variants
             ?.filter(
               (v: SyncVariant) => v.name.replace(colorRegex, "") === color
@@ -134,12 +140,15 @@ const CardOverlay: React.FC<CardOverlay> = ({ togglePopup, popup, id }) => {
             .map((v: SyncVariant) => (
               <div
                 onClick={() => setVariant(v)}
-                className="gap-2 rounded-md bg-zinc-500 p-2 text-sm"
+                className="gap-2 rounded-md bg-zinc-500 p-2 text-center text-sm"
               >
                 {v.name?.replace(sizeRegex, "")}
               </div>
             ))}
         </div>
+        <button className=" col-start-3 m-2 rounded-md bg-emerald-500 p-2 shadow-md shadow-emerald-600">
+          Buy Now
+        </button>
       </div>
     </div>
   );
