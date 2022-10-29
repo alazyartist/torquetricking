@@ -20,10 +20,10 @@ const AccountPage: NextPage = () => {
             {session.user?.email}
           </div>
           <Link href={"/"}>
-            <span className="font-titan text-xl text-zinc-300">Home</span>
+            <button className="font-titan text-xl text-zinc-300">Home</button>
           </Link>
           <Link href={"/shop"}>
-            <span className="font-titan text-xl text-zinc-300">Shop</span>
+            <button className="font-titan text-xl text-zinc-300">Shop</button>
           </Link>
           <div>{secretMessage}</div>
           <AccountDetails user={session.user} />

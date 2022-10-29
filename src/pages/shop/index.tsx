@@ -17,7 +17,7 @@ const Shop: NextPage = () => {
         </h1>
         <p className="text-2xl text-gray-300">Welcome to our shop</p>
         <Link href={"/"}>
-          <span className="font-titan text-3xl text-zinc-300">Home</span>
+          <button className="font-titan text-3xl text-zinc-300">Home</button>
         </Link>
         <ShopDisplay />
       </main>
