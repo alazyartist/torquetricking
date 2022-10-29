@@ -65,7 +65,7 @@ const CardOverlay: React.FC<CardOverlay> = ({ togglePopup, popup, id }) => {
   const { data: item } = trpc.shop.getItemsById.useQuery(id);
   console.log(item);
   let colorRegex = /^(\w+.\s)*\-|(\/\s\w+)$/gim;
-  let sizeRegex = /^(\w+.\s)*\-\s(\w+\s)*\//gim;
+  let sizeRegex = /^(\w+.\s)*\-\s(\w+.)*\//gim;
   const [showOptions, setShowOptions] = useState(false);
   const [color, setColor] = useState("");
   const [colorOptions, setColorOptions] = useState<Array<string>>([]);
