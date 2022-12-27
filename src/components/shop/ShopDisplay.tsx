@@ -71,7 +71,7 @@ const CardOverlay: React.FC<CardOverlay> = ({ togglePopup, popup, id }) => {
   const [colorOptions, setColorOptions] = useState<Array<string>>([]);
   const [sizeOptions, setSizeOptions] = useState<Array<string>>([]);
   const [variant, setVariant] = useState<SyncVariant | undefined>();
-  const [size, setSize] = useState([]);
+  const [size, setSize] = useState<string>();
   useEffect(() => {
     if (color === "") {
       setColor(item?.sync_variants[0].name.replace(colorRegex, ""));
@@ -83,8 +83,12 @@ const CardOverlay: React.FC<CardOverlay> = ({ togglePopup, popup, id }) => {
     );
     setColorOptions([...colorSet] as string[]);
   }, [item]);
+
+  const handleBuy = () => {
+    console.log("Buying Product", variant, color, size);
+  };
   return (
-    <div className="fixed top-10 left-10 z-20 flex h-[90vh] w-[90vw] flex-col items-center rounded-md bg-zinc-900 bg-opacity-80 p-2 text-zinc-300 drop-shadow-2xl ">
+    <div className="fixed top-[5vh] left-[5vw] z-20 flex h-[90vh] w-[90vw] flex-col items-center rounded-md bg-zinc-900 bg-opacity-80 p-2 text-zinc-300 drop-shadow-2xl ">
       <MdClose
         className="absolute top-2 right-2 text-3xl text-zinc-300"
         onClick={() => togglePopup(!popup)}
@@ -111,6 +115,7 @@ const CardOverlay: React.FC<CardOverlay> = ({ togglePopup, popup, id }) => {
               <div className="absolute top-0 w-[200px] rounded-lg bg-zinc-800 p-2">
                 {colorOptions.map((color) => (
                   <div
+                    key={color}
                     onClick={() => {
                       setColor(color);
                       setVariant(
@@ -137,16 +142,27 @@ const CardOverlay: React.FC<CardOverlay> = ({ togglePopup, popup, id }) => {
             ?.filter(
               (v: SyncVariant) => v.name.replace(colorRegex, "") === color
             )
-            .map((v: SyncVariant) => (
-              <div
-                onClick={() => setVariant(v)}
-                className="gap-2 rounded-md bg-zinc-500 p-2 text-center text-sm"
-              >
-                {v.name?.replace(sizeRegex, "")}
-              </div>
-            ))}
+            .map((v: SyncVariant) => {
+              let lsize = v.name?.replace(sizeRegex, "");
+              return (
+                <div
+                  onClick={() => {
+                    setSize(lsize);
+                    setVariant(v);
+                  }}
+                  className={`gap-2 rounded-md ${
+                    size === lsize ? "bg-emerald-500" : "bg-zinc-500"
+                  } p-2 text-center text-sm`}
+                >
+                  {lsize}
+                </div>
+              );
+            })}
         </div>
-        <button className=" col-start-3 m-2 rounded-md bg-emerald-500 p-2 shadow-md shadow-emerald-600">
+        <button
+          onClick={() => handleBuy()}
+          className=" col-start-3 m-2 rounded-md bg-emerald-500 p-2 shadow-md shadow-emerald-600"
+        >
           Buy Now
         </button>
       </div>
