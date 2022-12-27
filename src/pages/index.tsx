@@ -5,7 +5,7 @@ import { trpc } from "../utils/trpc";
 import Link from "next/link";
 
 const Home: NextPage = () => {
-  const hello = trpc.example.hello.useQuery({ text: "Dylan" });
+  const hello = trpc.example.hello.useQuery({ text: "" });
   const getAllUsers = trpc.example.getAllUsers.useQuery();
 
   return (
@@ -50,13 +50,11 @@ const AuthShowcase: React.FC = () => {
   return (
     <div className=" flex flex-col items-center justify-center gap-2">
       {sessionData && (
-        <p className="text-2xl text-blue-500">
+        <p className="text-2xl text-zinc-300">
           Logged in as {sessionData?.user?.email}
         </p>
       )}
-      {secretMessage && (
-        <p className="text-2xl text-blue-500">{secretMessage}</p>
-      )}
+
       <button
         className={`absolute bottom-5 left-5 rounded-md border border-black bg-violet-50  ${
           sessionData ? "text-2xs px-2 py-1" : "px-4 py-2 text-xl"

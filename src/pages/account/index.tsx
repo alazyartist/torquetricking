@@ -25,11 +25,16 @@ const AccountPage: NextPage = () => {
           <Link href={"/shop"}>
             <button className="font-titan text-xl text-zinc-300">Shop</button>
           </Link>
-          <div>{secretMessage}</div>
           <AccountDetails user={session.user} />
         </div>
       ) : (
-        <div>Login Motherfucker</div>
+        <div className="bg-grandeur mx-auto flex min-h-screen flex-col place-content-center place-items-center">
+          <div className="text-center font-inter text-3xl font-black text-zinc-300">
+            You need to be <br />
+            logged in
+            <br /> to see that
+          </div>
+        </div>
       )}
       <button
         className={`absolute bottom-5 left-5 rounded-md border border-black bg-violet-50 font-virgil  ${

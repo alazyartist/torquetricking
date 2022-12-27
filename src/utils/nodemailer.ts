@@ -10,7 +10,6 @@ const myOAuth2Client = new OAuth2(
   env.GMAIL_CLIENT_SECRET,
   "https://developers.google.com/oauthplayground"
 );
-
 myOAuth2Client.setCredentials({
   refresh_token: env.GMAIL_REFRESH_TOKEN,
 });
@@ -21,7 +20,7 @@ export const mailer = nodemailer.createTransport({
   port: 465,
   secure: true,
   auth: {
-    type: "OAUTH2",
+    type: "OAuth2",
     user: "torquetricking@gmail.com",
     clientId: env.GMAIL_CLIENT_ID,
     clientSecret: env.GMAIL_CLIENT_SECRET,
