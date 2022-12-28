@@ -24,5 +24,8 @@
     "**/*.mjs",
     "src/pages/_document.js"
   ],
+  "paths": {
+    "@types/*": ["types/*"]
+  },
   "exclude": ["node_modules"]
 }

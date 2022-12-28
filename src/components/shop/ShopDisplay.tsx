@@ -84,7 +84,23 @@ const CardOverlay: React.FC<CardOverlay> = ({ togglePopup, popup, id }) => {
     setColorOptions([...colorSet] as string[]);
   }, [item]);
 
-  const handleBuy = () => {
+  const { mutateAsync: buyNow } = trpc.shop.buyNow.useMutation();
+  const handleBuy = async () => {
+    buyNow({
+      variant,
+      recipient: {
+        name: "Test Name",
+        address1: "22 dubdub ln",
+        address2: "",
+        city: "Denver",
+        state_code: "CO",
+        state_name: "Colorado",
+        country_code: "US",
+        country_name: "United States",
+        zip: "80126",
+        email: "alazyartist@gmail.com",
+      },
+    });
     console.log("Buying Product", variant, color, size);
   };
   return (
@@ -144,19 +160,51 @@ const CardOverlay: React.FC<CardOverlay> = ({ togglePopup, popup, id }) => {
             )
             .map((v: SyncVariant) => {
               let lsize = v.name?.replace(sizeRegex, "");
-              return (
-                <div
-                  onClick={() => {
-                    setSize(lsize);
-                    setVariant(v);
-                  }}
-                  className={`gap-2 rounded-md ${
-                    size === lsize ? "bg-emerald-500" : "bg-zinc-500"
-                  } p-2 text-center text-sm`}
-                >
-                  {lsize}
-                </div>
-              );
+              if (v.main_category_id === 55) {
+                return (
+                  <div
+                    onClick={() => {
+                      setSize(lsize);
+                      setVariant(v);
+                    }}
+                    className={`w-fit gap-2 rounded-md ${
+                      size === lsize ? "bg-emerald-500" : "bg-zinc-500"
+                    } p-2 text-center text-sm`}
+                  >
+                    {v.product.name.replace("Enhanced Matte Paper Poster", "")}
+                  </div>
+                );
+              }
+              if (v.main_category_id === 24 || 29) {
+                return (
+                  <div
+                    onClick={() => {
+                      setSize(lsize);
+                      setVariant(v);
+                    }}
+                    className={`w-fit gap-2 rounded-md ${
+                      size === lsize ? "bg-emerald-500" : "bg-zinc-500"
+                    } p-2 text-center text-sm`}
+                  >
+                    {lsize}
+                  </div>
+                );
+              }
+              if (v.main_category_id === 27) {
+                return (
+                  <div
+                    onClick={() => {
+                      setSize(lsize);
+                      setVariant(v);
+                    }}
+                    className={`w-fit gap-2 rounded-md ${
+                      size === lsize ? "bg-emerald-500" : "bg-zinc-500"
+                    } p-2 text-center text-sm`}
+                  >
+                    {lsize}
+                  </div>
+                );
+              }
             })}
         </div>
         <button
