@@ -85,6 +85,7 @@ const CardOverlay: React.FC<CardOverlay> = ({ togglePopup, popup, id }) => {
   }, [item]);
 
   const { mutateAsync: buyNow } = trpc.shop.buyNow.useMutation();
+  //Move this to api call for after stripe process is completed
   const handleBuy = async () => {
     buyNow({
       variant,
