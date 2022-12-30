@@ -226,7 +226,11 @@ const CardOverlay: React.FC<CardOverlay> = ({ togglePopup, popup, id }) => {
         >
           Buy Now
         </button>
-        <CalculateShipping variant={variant} />
+        <CalculateShipping
+          variant={variant as SyncVariant}
+          setRecipient={setRecipient}
+          recipient={recipient}
+        />
       </div>
       {showForm && (
         <div className="absolute top-[0vh] left-[0vw] z-[10] h-[100%] w-[100%] rounded-md bg-zinc-900 bg-opacity-40 p-8 backdrop-blur-md">

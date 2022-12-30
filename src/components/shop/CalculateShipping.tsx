@@ -4,8 +4,12 @@ import { SyncVariant } from "../../types/SyncVariant";
 import { Recipient } from "./ShopDisplay";
 interface CalculateShippingProps {
   variant: SyncVariant;
-  setRecipient: () => void;
-  recipient: Recipient;
+  setRecipient: any;
+  recipient: Recipient | undefined;
+}
+interface CC {
+  name: string;
+  code: string;
 }
 const CalculateShipping: React.FC<CalculateShippingProps> = ({
   variant,
@@ -17,7 +21,7 @@ const CalculateShipping: React.FC<CalculateShippingProps> = ({
     trpc.shop.calculateShipping.useMutation();
   const [selectedCode, selectCode] = useState("US");
   const [showCodes, setShowCodes] = useState(false);
-  const handleSelect = (cC) => {
+  const handleSelect = (cC: CC) => {
     selectCode(cC.code);
     setShowCodes(false);
   };
@@ -35,7 +39,7 @@ const CalculateShipping: React.FC<CalculateShippingProps> = ({
       {showCodes && (
         <div className="h-[20vh] overflow-y-scroll">
           {countryCodes &&
-            countryCodes?.result?.map((cC) => (
+            countryCodes?.result?.map((cC: CC) => (
               <div
                 className="flex justify-between"
                 onClick={() => handleSelect(cC)}
