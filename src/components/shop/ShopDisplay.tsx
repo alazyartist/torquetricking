@@ -1,7 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { trpc } from "../../utils/trpc";
 import { MdClose } from "react-icons/md";
+import PaymentEmbed from "../payments/PaymentEmbed";
 import { SyncVariant } from "../../types/SyncVariant";
+import CalculateShipping from "./CalculateShipping";
+export interface Recipient {
+  name: string;
+  address1: string;
+  address2: string;
+  city: string;
+  state_code: string;
+  state_name: string;
+  country_code: string;
+  country_name: string;
+  zip: string;
+  email: string;
+}
 interface Product {
   external_id: string;
   id: number;
@@ -19,7 +33,7 @@ const ShopDisplay: React.FC = () => {
   return (
     <div className="grid grid-cols-3 gap-4 md:grid-cols-4">
       {products?.map((product: Product) => {
-        return <ProductCard {...product} />;
+        return <ProductCard key={product.id + "Product"} {...product} />;
       })}
     </div>
   );
@@ -34,10 +48,12 @@ const ProductCard: React.FC<Product> = ({
   const [popup, togglePopup] = useState(false);
   return (
     <>
-      {popup && <CardOverlay id={id} popup={popup} togglePopup={togglePopup} />}
+      {popup && (
+        <CardOverlay key={id} id={id} popup={popup} togglePopup={togglePopup} />
+      )}
       {!is_ignored && (
         <div
-          key={id}
+          key={id + "Product Card"}
           onClick={() => togglePopup(!popup)}
           className="flex h-full w-24 flex-col items-center rounded-md drop-shadow-lg hover:scale-110  "
         >
@@ -71,7 +87,9 @@ const CardOverlay: React.FC<CardOverlay> = ({ togglePopup, popup, id }) => {
   const [colorOptions, setColorOptions] = useState<Array<string>>([]);
   const [sizeOptions, setSizeOptions] = useState<Array<string>>([]);
   const [variant, setVariant] = useState<SyncVariant | undefined>();
+  const [showForm, setShowForm] = useState(false);
   const [size, setSize] = useState<string>();
+  const [recipient, setRecipient] = useState<Recipient>();
   useEffect(() => {
     if (color === "") {
       setColor(item?.sync_variants[0].name.replace(colorRegex, ""));
@@ -85,30 +103,24 @@ const CardOverlay: React.FC<CardOverlay> = ({ togglePopup, popup, id }) => {
   }, [item]);
 
   const { mutateAsync: buyNow } = trpc.shop.buyNow.useMutation();
+
   //Move this to api call for after stripe process is completed
   const handleBuy = async () => {
-    buyNow({
-      variant,
-      recipient: {
-        name: "Test Name",
-        address1: "22 dubdub ln",
-        address2: "",
-        city: "Denver",
-        state_code: "CO",
-        state_name: "Colorado",
-        country_code: "US",
-        country_name: "United States",
-        zip: "80126",
-        email: "alazyartist@gmail.com",
-      },
-    });
+    // buyNow({
+    //   variant,
+    // });
+    // setShowForm((prev) => !prev);
+
     console.log("Buying Product", variant, color, size);
   };
   return (
     <div className="fixed top-[5vh] left-[5vw] z-20 flex h-[90vh] w-[90vw] flex-col items-center rounded-md bg-zinc-900 bg-opacity-80 p-2 text-zinc-300 drop-shadow-2xl ">
       <MdClose
-        className="absolute top-2 right-2 text-3xl text-zinc-300"
-        onClick={() => togglePopup(!popup)}
+        className="absolute top-2 right-2 z-[1000] text-3xl text-zinc-300"
+        onClick={() => {
+          togglePopup(false);
+          console.log("i want to close");
+        }}
       />
       <h1 className="font-titan text-3xl text-zinc-300 ">
         {item?.sync_product.name}
@@ -214,7 +226,16 @@ const CardOverlay: React.FC<CardOverlay> = ({ togglePopup, popup, id }) => {
         >
           Buy Now
         </button>
+        <CalculateShipping variant={variant} />
       </div>
+      {showForm && (
+        <div className="absolute top-[0vh] left-[0vw] z-[10] h-[100%] w-[100%] rounded-md bg-zinc-900 bg-opacity-40 p-8 backdrop-blur-md">
+          <PaymentEmbed
+            creditAmount={variant?.retail_price}
+            setShowForm={setShowForm}
+          />
+        </div>
+      )}
     </div>
   );
 };

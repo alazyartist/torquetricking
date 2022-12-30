@@ -21,6 +21,8 @@ export const serverSchema = z.object({
   GMAIL_CLIENT_ID: z.string(),
   GMAIL_CLIENT_SECRET: z.string(),
   GMAIL_REFRESH_TOKEN: z.string(),
+  STRIPE_SECRET_KEY: z.string(),
+  STRIPE_PUBLIC_KEY: z.string(),
 });
 
 /**
