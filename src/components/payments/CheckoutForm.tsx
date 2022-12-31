@@ -1,17 +1,17 @@
-import React, { useState } from "react";
+import React, { FormEvent, useState } from "react";
 import {
   PaymentElement,
   useStripe,
   useElements,
 } from "@stripe/react-stripe-js";
-const CheckoutForm = ({ setShowForm }) => {
+const CheckoutForm: React.FC<any> = ({ setShowForm }) => {
   const stripe = useStripe();
   const elements = useElements();
 
   const [message, setMessage] = useState<string>();
   const [isProcessing, setIsProcessing] = useState<boolean>();
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (!stripe || !elements) return;
 

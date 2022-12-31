@@ -45,6 +45,7 @@ export const shopRouter = router({
           metadata: {
             user_id: input.user_id,
             amount: input.amount,
+            product: JSON.stringify(input.product.id),
           },
         });
         console.log(paymentIntent);

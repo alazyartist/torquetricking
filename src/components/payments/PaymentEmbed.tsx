@@ -3,28 +3,35 @@ import { loadStripe, Stripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import CheckoutForm from "./CheckoutForm";
 import { trpc } from "../../utils/trpc";
-const PaymentEmbed = ({ setShowForm, creditAmount }) => {
-  const [stripePromise, setStripePromise] =
-    useState<Promise<Stripe | null>>(null);
+const PaymentEmbed: React.FC<any> = ({
+  setShowForm,
+  creditAmount,
+  userDetails,
+  product,
+}) => {
+  const [stripePromise, setStripePromise] = useState<Promise<Stripe | null>>();
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const { data: stprom } = trpc.shop.getSecretKey.useQuery();
   useEffect(() => {
     if (stprom) {
       setStripePromise(loadStripe(stprom));
     }
-  }, []);
+  }, [stprom]);
   const { mutateAsync: paymentIntent, data } =
     trpc.shop.createPaymentIntent.useMutation();
   useEffect(() => {
-    console.log(creditAmount);
+    console.log(creditAmount, stripePromise, clientSecret);
     paymentIntent({
-      user_id: "test_uuid_123",
+      user_id: userDetails.id,
       amount: parseFloat(creditAmount),
+      product: product,
     });
+  }, [creditAmount]);
+  useEffect(() => {
     if (data) {
       setClientSecret(data?.clientSecret);
     }
-  }, [creditAmount]);
+  }, [data, clientSecret, stripePromise]);
   const appearance = { theme: "night" };
   return (
     <div className="flex flex-col gap-2">

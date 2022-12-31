@@ -89,6 +89,8 @@ const CardOverlay: React.FC<CardOverlay> = ({ togglePopup, popup, id }) => {
   const [variant, setVariant] = useState<SyncVariant | undefined>();
   const [showForm, setShowForm] = useState(false);
   const [size, setSize] = useState<string>();
+  const [total, setTotal] = useState(0);
+
   const [recipient, setRecipient] = useState<Recipient>();
   useEffect(() => {
     if (color === "") {
@@ -108,10 +110,11 @@ const CardOverlay: React.FC<CardOverlay> = ({ togglePopup, popup, id }) => {
   const handleBuy = async () => {
     // buyNow({
     //   variant,
+    //   recipient: userDetails,
     // });
-    // setShowForm((prev) => !prev);
+    setShowForm(true);
 
-    console.log("Buying Product", userDetails, variant, color, size);
+    // console.log("Buying Product", userDetails, variant, color, size);
   };
   useEffect(() => {
     setRecipient(userDetails);
@@ -122,7 +125,6 @@ const CardOverlay: React.FC<CardOverlay> = ({ togglePopup, popup, id }) => {
         className="absolute top-2 right-2 z-[1000] text-3xl text-zinc-300"
         onClick={() => {
           togglePopup(false);
-          console.log("i want to close");
         }}
       />
       <h1 className="font-titan text-3xl text-zinc-300 ">
@@ -183,7 +185,7 @@ const CardOverlay: React.FC<CardOverlay> = ({ togglePopup, popup, id }) => {
                       setSize(lsize);
                       setVariant(v);
                     }}
-                    className={`w-fit gap-2 rounded-md ${
+                    className={`w-full gap-2 rounded-md ${
                       size === lsize ? "bg-emerald-500" : "bg-zinc-500"
                     } p-2 text-center text-sm`}
                   >
@@ -198,7 +200,7 @@ const CardOverlay: React.FC<CardOverlay> = ({ togglePopup, popup, id }) => {
                       setSize(lsize);
                       setVariant(v);
                     }}
-                    className={`w-fit gap-2 rounded-md ${
+                    className={`w-full gap-2 rounded-md ${
                       size === lsize ? "bg-emerald-500" : "bg-zinc-500"
                     } p-2 text-center text-sm`}
                   >
@@ -213,7 +215,7 @@ const CardOverlay: React.FC<CardOverlay> = ({ togglePopup, popup, id }) => {
                       setSize(lsize);
                       setVariant(v);
                     }}
-                    className={`w-fit gap-2 rounded-md ${
+                    className={`w-full gap-2 rounded-md ${
                       size === lsize ? "bg-emerald-500" : "bg-zinc-500"
                     } p-2 text-center text-sm`}
                   >
@@ -223,23 +225,29 @@ const CardOverlay: React.FC<CardOverlay> = ({ togglePopup, popup, id }) => {
               }
             })}
         </div>
+        <div className="col-start-3">
+          <CalculateShipping
+            total={total}
+            setTotal={setTotal}
+            variant={variant as SyncVariant}
+            setRecipient={setRecipient}
+            recipient={recipient}
+          />
+        </div>
         <button
           onClick={() => handleBuy()}
           className=" col-start-3 m-2 rounded-md bg-emerald-500 p-2 shadow-md shadow-emerald-600"
         >
           Buy Now
         </button>
-        <CalculateShipping
-          variant={variant as SyncVariant}
-          setRecipient={setRecipient}
-          recipient={recipient}
-        />
       </div>
       {showForm && (
         <div className="absolute top-[0vh] left-[0vw] z-[10] h-[100%] w-[100%] rounded-md bg-zinc-900 bg-opacity-40 p-8 backdrop-blur-md">
           <PaymentEmbed
-            creditAmount={variant?.retail_price}
-            setShowForm={setShowForm}
+            userDetails={userDetails}
+            product={variant}
+            creditAmount={total}
+            setShowForm={setShowForm as any}
           />
         </div>
       )}

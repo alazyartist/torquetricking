@@ -23,6 +23,7 @@ export const serverSchema = z.object({
   GMAIL_REFRESH_TOKEN: z.string(),
   STRIPE_SECRET_KEY: z.string(),
   STRIPE_PUBLIC_KEY: z.string(),
+  STRIPE_WEBHOOK_SECRET: z.string(),
 });
 
 /**
