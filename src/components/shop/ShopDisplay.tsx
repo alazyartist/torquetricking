@@ -103,7 +103,7 @@ const CardOverlay: React.FC<CardOverlay> = ({ togglePopup, popup, id }) => {
   }, [item]);
 
   const { mutateAsync: buyNow } = trpc.shop.buyNow.useMutation();
-
+  const { data: userDetails } = trpc.auth.getUserDetails.useQuery();
   //Move this to api call for after stripe process is completed
   const handleBuy = async () => {
     // buyNow({
@@ -111,10 +111,13 @@ const CardOverlay: React.FC<CardOverlay> = ({ togglePopup, popup, id }) => {
     // });
     // setShowForm((prev) => !prev);
 
-    console.log("Buying Product", variant, color, size);
+    console.log("Buying Product", userDetails, variant, color, size);
   };
+  useEffect(() => {
+    setRecipient(userDetails);
+  });
   return (
-    <div className="fixed top-[5vh] left-[5vw] z-20 flex h-[90vh] w-[90vw] flex-col items-center rounded-md bg-zinc-900 bg-opacity-80 p-2 text-zinc-300 drop-shadow-2xl ">
+    <div className="no-scrollbar fixed top-[5vh] left-[5vw] z-20 flex h-[90vh] w-[90vw] flex-col items-center overflow-y-scroll rounded-md bg-zinc-900 bg-opacity-80 p-2 text-zinc-300 drop-shadow-2xl ">
       <MdClose
         className="absolute top-2 right-2 z-[1000] text-3xl text-zinc-300"
         onClick={() => {

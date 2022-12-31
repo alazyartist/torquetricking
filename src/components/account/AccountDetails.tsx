@@ -1,6 +1,7 @@
 import { User } from "next-auth";
 import React, { useEffect, useState } from "react";
-import { FaAddressCard } from "react-icons/fa";
+import { FaAddressCard, FaCheckCircle } from "react-icons/fa";
+import { MdClose } from "react-icons/md";
 import { trpc } from "../../utils/trpc";
 import { Recipient } from "../shop/ShopDisplay";
 interface AccountDetailProps {
@@ -10,15 +11,13 @@ const AccountDetails: React.FC<AccountDetailProps> = (
   props: AccountDetailProps
 ) => {
   return (
-    <div className="font-inter text-zinc-300">
-      <div>AccountDetails</div>
-      <FaAddressCard />
-      <div className="flex items-center gap-2">
-        <Address />
-
+    <div className="flex flex-col font-inter text-zinc-300">
+      <div className="text-center text-3xl">AccountDetails</div>
+      <div className="flex items-center gap-2 place-self-center text-xl">
+        <FaAddressCard />
         {props?.user?.email}
-        {JSON.stringify(props?.user)}
       </div>
+      <Address />
     </div>
   );
 };
@@ -34,7 +33,12 @@ const Address: React.FC = () => {
     country_name: "",
   });
   const { data: userDetails } = trpc.auth.getUserDetails.useQuery();
-  const { mutateAsync: saveAddress } = trpc.auth.setUserDetails.useMutation();
+  const {
+    mutateAsync: saveAddress,
+    isSuccess,
+    isError,
+    status,
+  } = trpc.auth.setUserDetails.useMutation();
   const { data: countryCodes } = trpc.shop.getCountryCode.useQuery();
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -47,13 +51,28 @@ const Address: React.FC = () => {
       countryCodes?.result?.find((c) => c.code === address.country_code).states
     );
   }, [countryCodes, address]);
+  useEffect(() => {
+    if (userDetails) {
+      setAddress({ ...userDetails });
+      document.getElementById("stateDropdown").value = userDetails?.state_code;
+      document.getElementById("country").value = userDetails?.country_code;
+    }
+  }, [userDetails]);
   return (
     <div className="w-[30vw]">
-      <div>{JSON.stringify(address)}</div>
       <form
         onSubmit={handleSubmit}
         className="flex flex-col gap-2 text-zinc-900"
       >
+        {status === "success" && (
+          <FaCheckCircle className="place-self-center fill-emerald-500 text-5xl" />
+        )}
+        {/* {isSuccess && (
+          <FaCheckCircle className="place-self-center fill-emerald-500 text-5xl" />
+        )} */}
+        {status === "error" && (
+          <MdClose className="place-self-center fill-red-500 text-5xl" />
+        )}
         <label className="flex flex-col">
           Name
           <input
@@ -97,17 +116,7 @@ const Address: React.FC = () => {
             onChange={(e) => setAddress({ ...address, city: e.target.value })}
           />
         </label>
-        <label className="flex flex-col">
-          State
-          <input
-            className="rounded-md bg-opacity-30 p-2"
-            type={"text"}
-            value={address?.state_name}
-            onChange={(e) =>
-              setAddress({ ...address, state_name: e.target.value })
-            }
-          />
-        </label>
+
         <label className="flex flex-col">
           Zip Code
           <input
@@ -121,6 +130,8 @@ const Address: React.FC = () => {
         <label className="flex flex-col">
           State
           <select
+            className="rounded-md bg-opacity-30 p-2"
+            id="stateDropdown"
             onChange={(e) => {
               setAddress({
                 ...address,
@@ -138,6 +149,8 @@ const Address: React.FC = () => {
         <label className="flex flex-col">
           Country
           <select
+            className="rounded-md bg-opacity-30 p-2"
+            id="country"
             onChange={(e) => {
               setAddress({
                 ...address,
@@ -152,7 +165,12 @@ const Address: React.FC = () => {
               ))}
           </select>
         </label>
-        <button type="submit">Save</button>
+        <button
+          className="w-fit place-self-center rounded-xl bg-zinc-800 px-4 py-2 text-2xl text-zinc-200"
+          type="submit"
+        >
+          Save
+        </button>
       </form>
     </div>
   );
