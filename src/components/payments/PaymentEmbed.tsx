@@ -20,9 +20,9 @@ const PaymentEmbed: React.FC<any> = ({
   const { mutateAsync: paymentIntent, data } =
     trpc.shop.createPaymentIntent.useMutation();
   useEffect(() => {
-    console.log(creditAmount, stripePromise, clientSecret);
+    console.log(creditAmount, userDetails);
     paymentIntent({
-      user_id: userDetails.id,
+      user_id: userDetails.user.id,
       amount: parseFloat(creditAmount),
       product: product,
     });

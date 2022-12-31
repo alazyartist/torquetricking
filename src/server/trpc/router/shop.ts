@@ -31,7 +31,7 @@ export const shopRouter = router({
         amount: z.number().optional(),
       })
     )
-    .mutation(async ({ input }) => {
+    .mutation(async ({ input, ctx }) => {
       console.log("recreatingPaymentIntent");
       console.log();
 
@@ -48,7 +48,20 @@ export const shopRouter = router({
             product: JSON.stringify(input.product.id),
           },
         });
-        console.log(paymentIntent);
+        const orderDetails = await ctx.prisma.user.update({
+          where: { id: input.user_id },
+          data: {
+            orders: {
+              create: {
+                paymentIntent: paymentIntent.id,
+                amount: input.amount,
+                cart: input.product,
+              },
+            },
+          },
+          include: { orders: true },
+        });
+        console.log(orderDetails);
         return { clientSecret: paymentIntent.client_secret };
       } catch (err) {
         console.log(err);
