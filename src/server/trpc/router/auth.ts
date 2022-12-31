@@ -7,8 +7,8 @@ export const authRouter = router({
   getSecretMessage: protectedProcedure.query(() => {
     return "You are logged in and can see this secret message!";
   }),
-  getUserDetails: protectedProcedure.query(({ ctx }) => {
-    return ctx.prisma.adress.findUnique({
+  getUserDetails: protectedProcedure.query(async ({ ctx }) => {
+    return await ctx.prisma.address.findUnique({
       where: { email: ctx.session.user.email },
     });
   }),
@@ -16,6 +16,14 @@ export const authRouter = router({
     .input(z.any())
     .mutation(async ({ input, ctx }) => {
       console.log(input);
-      return;
+      console.log(ctx.session.user.email);
+      return ctx.prisma.address.upsert({
+        where: { email: ctx.session.user.email },
+        update: { ...input },
+        create: {
+          email: ctx.session.user.email,
+          ...input,
+        },
+      });
     }),
 });

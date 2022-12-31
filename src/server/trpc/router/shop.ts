@@ -53,6 +53,14 @@ export const shopRouter = router({
         console.log(err);
       }
     }),
+  getStateCode: publicProcedure.query(async () => {
+    try {
+      const data = await printfulApi.get("/states");
+      return data.data;
+    } catch (err) {
+      console.log(err);
+    }
+  }),
   getCountryCode: publicProcedure.query(async () => {
     try {
       const data = await printfulApi.get("/countries");
