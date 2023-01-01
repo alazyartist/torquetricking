@@ -15,22 +15,22 @@ export const config = {
 
 export default async function webhookHandler(
   req: NextApiRequest,
-  res: NextApiResponse,
-  ctx: any
+  res: NextApiResponse
 ) {
   console.log("webhook");
   const sig = req.headers["stripe-signature"];
   const reqBuffer = await buffer(req);
   let event;
-  const caller = appRouter.createCaller({ prisma });
+  const caller = appRouter.createCaller({ session: null, prisma });
   try {
     event = await stripe.webhooks.constructEvent(
       reqBuffer,
-      sig,
+      sig as string,
       endpointSecret
     );
     // Handle the event
     const paymentIntent = await stripe.paymentIntents.retrieve(
+      //@ts-ignore
       event.data.object.id
     );
     switch (event.type) {
@@ -96,12 +96,12 @@ export default async function webhookHandler(
     // console.log(paymentIntent);
     // console.log(event);
     // console.log(event?.data);
-  } catch (err) {
+  } catch (err: Error | any) {
     console.log(err);
     res.status(400).send(`Webhook Error: ${err.message}`);
     return;
   }
 
   // Return a 200 res to acknowledge receipt of the event
-  res.status(200).send();
+  res.status(200).send("");
 }

@@ -26,10 +26,10 @@ export const shopRouter = router({
   createPaymentIntent: publicProcedure
     .input(
       z.object({
-        user_id: z.string().nullish(),
-        product: z.any().nullish(),
-        amount: z.number().nullish(),
-        shipping: z.string().nullish(),
+        user_id: z.string(),
+        product: z.any(),
+        amount: z.number(),
+        shipping: z.string(),
       })
     )
     .mutation(async ({ input, ctx }) => {
@@ -125,6 +125,7 @@ export const shopRouter = router({
           items: z.any(),
           recipient: z.any(),
           paymentIntent: z.string(),
+          shipping: z.string(),
           // {
           //   name: z.string(),
           //   address1: z.string(),

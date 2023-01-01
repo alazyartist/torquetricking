@@ -1,5 +1,5 @@
 import { User } from "next-auth";
-import React, { useEffect, useState } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
 import { FaAddressCard, FaCheckCircle } from "react-icons/fa";
 import { MdClose } from "react-icons/md";
 import { trpc } from "../../utils/trpc";
@@ -40,21 +40,24 @@ const Address: React.FC = () => {
     status,
   } = trpc.auth.setUserDetails.useMutation();
   const { data: countryCodes } = trpc.shop.getCountryCode.useQuery();
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     console.log("save", address);
     saveAddress(address);
   };
-  const [states, setStates] = useState();
+  const [states, setStates] = useState<any>();
   useEffect(() => {
     setStates(
-      countryCodes?.result?.find((c) => c.code === address.country_code).states
+      countryCodes?.result?.find((c: any) => c.code === address.country_code)
+        .states
     );
   }, [countryCodes, address]);
   useEffect(() => {
     if (userDetails) {
       setAddress({ ...userDetails });
+      //@ts-ignore
       document.getElementById("stateDropdown").value = userDetails?.state_code;
+      //@ts-ignore
       document.getElementById("country").value = userDetails?.country_code;
     }
   }, [userDetails]);
@@ -141,7 +144,7 @@ const Address: React.FC = () => {
             style={{ color: "#000000" }}
           >
             {states &&
-              states?.map((option) => (
+              states?.map((option: { code: string; name: string }) => (
                 <option value={option.code}>{option.name}</option>
               ))}
           </select>
@@ -160,9 +163,11 @@ const Address: React.FC = () => {
             style={{ color: "#000000" }}
           >
             {countryCodes &&
-              countryCodes?.result?.map((option) => (
-                <option value={option.code}>{option.name}</option>
-              ))}
+              countryCodes?.result?.map(
+                (option: { code: string; name: string }) => (
+                  <option value={option.code}>{option.name}</option>
+                )
+              )}
           </select>
         </label>
         <button

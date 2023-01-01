@@ -7,6 +7,8 @@ interface CalculateShippingProps {
   setRecipient: any;
   recipient: Recipient | undefined;
   total: number;
+  shippingOption: any;
+  setShippingOption: any;
   setTotal: any;
 }
 interface CC {
@@ -43,13 +45,8 @@ const CalculateShipping: React.FC<CalculateShippingProps> = ({
     }
     console.log(variant);
   }, [variant]);
-  const { data: details } = trpc.shop.getOrderDetails.useQuery({
-    user_id: "clcab0vst0000u1i8q3w3e066",
-    paymentIntent: "pi_3MLDSN2mGeTC286Z0PrELTAD",
-  });
+
   useEffect(() => {
-    console.log("orderdetails", details);
-    console.log(shippingOption);
     setTotal(
       (
         parseFloat(variant?.retail_price) + parseFloat(shippingOption?.rate)
@@ -63,7 +60,7 @@ const CalculateShipping: React.FC<CalculateShippingProps> = ({
           onChange={(e) => setShippingOption(JSON.parse(e.target.value))}
           className="max-w-[80vw] rounded-md p-2"
         >
-          {shippingCost?.result.map((option) => (
+          {shippingCost?.result.map((option: any) => (
             <option
               value={JSON.stringify(option)}
               className="flex w-full max-w-[80vw] justify-between"
