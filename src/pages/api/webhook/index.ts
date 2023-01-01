@@ -53,24 +53,26 @@ export default async function webhookHandler(
       // 		}
       // 	});
       case "payment_intent.created":
-        console.log("created", event.data);
-        const orderDetailstest = await caller.shop.getOrderDetails({
-          user_id: paymentIntent.metadata.user_id as string,
-          paymentIntent: paymentIntent.id,
-        });
-        console.log("cart", orderDetailstest?.order.cart);
-        const purchased = await caller.shop.buyNow({
-          recipient: { ...orderDetailstest?.user.address },
-          items: [orderDetailstest?.order.cart],
-          shipping: orderDetailstest?.order.shipping,
-          paymentIntent: paymentIntent.id,
-        });
-        await mailer.sendMail({
-          to: orderDetailstest?.user.email,
-          from: "torquetricking@gmail.com",
-          subject: `Thanks for your purchase - Order ${orderDetailstest?.order.id}`,
-          html: html(orderDetailstest),
-        });
+
+      //Code Below useful for testing. it is a copy of payment.intent.succeeded
+      // console.log("created", event.data);
+      // const orderDetailstest = await caller.shop.getOrderDetails({
+      //   user_id: paymentIntent.metadata.user_id as string,
+      //   paymentIntent: paymentIntent.id,
+      // });
+      // console.log("cart", orderDetailstest?.order.cart);
+      // // const purchased = await caller.shop.buyNow({
+      // //   recipient: { ...orderDetailstest?.user.address },
+      // //   items: [orderDetailstest?.order.cart],
+      // //   shipping: orderDetailstest?.order.shipping,
+      // //   paymentIntent: paymentIntent.id,
+      // // });
+      // await mailer.sendMail({
+      //   to: orderDetailstest?.user.email,
+      //   from: "torquetricking@gmail.com",
+      //   subject: `Thanks for your purchase - Order ${orderDetailstest?.order.id}`,
+      //   html: html(orderDetailstest),
+      // });
       // console.log("purchased", purchased);
 
       case "charge.succeeded":
@@ -101,7 +103,7 @@ export default async function webhookHandler(
           attachments: [
             {
               filename: "product.png",
-              cid: "unique@product.ee",
+              cid: "product_image",
               path: orderDetails.order.cart.files[
                 orderDetails.order.cart.files.length - 1
               ].preview_url,
@@ -130,6 +132,7 @@ export default async function webhookHandler(
 
 function html(orderDetails) {
   console.log("htmlOrderEmail", orderDetails);
+  let { user, order } = orderDetails;
   console.log(
     "htmlOrderPreview",
     orderDetails.order.cart.files[orderDetails.order.cart.files.length - 1]
@@ -146,7 +149,9 @@ function html(orderDetails) {
   };
   //TODO clean up email login design
   return `
-<body style="background: ${color.background};">
+  <body style="background: ${
+    color.background
+  }; font-family: Helvetica, Arial, sans-serif; color: ${color.text};">
   <table width="100%" border="0" cellspacing="20" cellpadding="0"
     style="background: ${
       color.mainBackground
@@ -160,13 +165,39 @@ function html(orderDetails) {
       </td>
     </tr>
     <tr>
+    <td>
+    <h1>
+    Thanks ${user.address.name},
+    </h1>
+    
+    <div style="display:flex gap:4px">
+      <p>
+      You ordered:<br/>
+        ${order.cart.name}<br/>
+        ${order.amount}$</br>
+        ${order.shipping} Shipping</br>
+      </p>
+      <p>Your Order will be shipped to</p>
+      <p>${user.address.name}<br/>
+            ${user.address.address1}<br/>
+            ${user.address.address2 ? user.address.address2 + "<br/>" : ""}
+          ${user.address.city},${user.address.state_code},${
+    user.address.country_code
+  }</p>
+      </div>
+    </td>
+    </tr>
+    <tr>
       <td align="center" style="padding: 20px 0;">
         <table border="0" cellspacing="0" cellpadding="0">
+        <tr>
+        <td>
+        <img src="${
+          order.cart.files[order.cart.files.length - 1].preview_url
+        }" alt="Product image" />
+        </td>
+        </tr>
           <tr>
-          <td>
-          "${JSON.stringify(orderDetails)}"
-          <img src="cid:unique@product.ee" width="400" height="400" />
-          </td>
             <td align="center" style="border-radius: 5px;" bgcolor="${
               color.buttonBackground
             }"><a href="https://torquetricking.com/account"
@@ -185,8 +216,15 @@ function html(orderDetails) {
         style="padding: 0px 0px 10px 0px; font-size: 16px; line-height: 22px; font-family: Helvetica, Arial, sans-serif; color: ${
           color.text
         };">
-        We appreciate your order!
+        We appreciate your support! This purchase helps fund the <a href="https://trickedex.app" target="_blank">Trickedex</a>
       </td>
+    </tr>
+    <tr>
+    <p style="padding: 2px 2px; color:#555">
+    The following values will be needed for any returns.<br/>
+    pid:${order.printful_id}<br/>
+    sid:${order.paymentIntent}</br>
+    </p>
     </tr>
   </table>
 </body>
