@@ -26,9 +26,9 @@ export const shopRouter = router({
   createPaymentIntent: publicProcedure
     .input(
       z.object({
-        user_id: z.string().optional(),
-        product: z.any().optional(),
-        amount: z.number().optional(),
+        user_id: z.string().nullish(),
+        product: z.any().nullish(),
+        amount: z.number().nullish(),
       })
     )
     .mutation(async ({ input, ctx }) => {
@@ -94,6 +94,24 @@ export const shopRouter = router({
         });
         console.log(data);
         return data.data;
+      } catch (err) {
+        console.log(err);
+      }
+    }),
+  getOrderDetails: publicProcedure
+    .input(z.object({ user_id: z.string(), paymentIntent: z.string() }))
+    .query(async ({ input, ctx }) => {
+      try {
+        console.log(input);
+        const user = await ctx.prisma.user.findUnique({
+          where: { id: input.user_id },
+          include: { address: true },
+        });
+        const order = await ctx.prisma.orders.findUnique({
+          where: { paymentIntent: input.paymentIntent },
+        });
+        console.log(user, order);
+        return { user, order };
       } catch (err) {
         console.log(err);
       }

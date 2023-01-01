@@ -42,7 +42,12 @@ const CalculateShipping: React.FC<CalculateShippingProps> = ({
     }
     console.log(variant);
   }, [variant]);
+  const { data: details } = trpc.shop.getOrderDetails.useQuery({
+    user_id: "clcab0vst0000u1i8q3w3e066",
+    paymentIntent: "pi_3MLDSN2mGeTC286Z0PrELTAD",
+  });
   useEffect(() => {
+    console.log("orderdetails", details);
     console.log(shippingOption);
     setTotal(
       (
