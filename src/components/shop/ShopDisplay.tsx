@@ -121,7 +121,7 @@ const CardOverlay: React.FC<CardOverlay> = ({ togglePopup, popup, id }) => {
     setRecipient(userDetails);
   });
   return (
-    <div className="no-scrollbar fixed top-[5vh] left-[5vw] z-20 flex h-[90vh] w-[90vw] flex-col items-center overflow-y-scroll rounded-md bg-zinc-900 bg-opacity-80 p-2 text-zinc-300 drop-shadow-2xl ">
+    <div className="no-scrollbar fixed top-[5vh] left-[5vw] z-20 flex h-[90vh] w-[90vw] flex-col items-center overflow-y-auto rounded-md bg-zinc-900 bg-opacity-80 p-2 text-zinc-300 drop-shadow-2xl ">
       <MdClose
         className="absolute top-2 right-2 z-[1000] text-3xl text-zinc-300"
         onClick={() => {
@@ -131,7 +131,7 @@ const CardOverlay: React.FC<CardOverlay> = ({ togglePopup, popup, id }) => {
       <h1 className="font-titan text-3xl text-zinc-300 ">
         {item?.sync_product.name}
       </h1>
-      <div className="flex flex-col p-2 md:grid md:grid-cols-2 lg:grid-flow-row lg:grid-cols-3">
+      <div className=" flex flex-col p-2 md:grid md:grid-cols-2 lg:grid-flow-row lg:grid-cols-2">
         <img
           className="col-start-3 h-[350px] w-[350px] content-center items-center rounded-md"
           src={
@@ -238,6 +238,7 @@ const CardOverlay: React.FC<CardOverlay> = ({ togglePopup, popup, id }) => {
           />
         </div>
         <button
+          disabled={total === "NaN"}
           onClick={() => handleBuy()}
           className=" col-start-3 m-2 rounded-md bg-emerald-500 p-2 shadow-md shadow-emerald-600"
         >

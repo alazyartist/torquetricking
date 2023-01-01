@@ -13,6 +13,11 @@ export const authRouter = router({
       include: { user: true },
     });
   }),
+  getUserOrders: protectedProcedure.query(async ({ ctx }) => {
+    return await ctx.prisma.orders.findMany({
+      where: { userId: ctx.session.user.id },
+    });
+  }),
   setUserDetails: protectedProcedure
     .input(z.any())
     .mutation(async ({ input, ctx }) => {
@@ -20,10 +25,28 @@ export const authRouter = router({
       console.log(ctx.session.user.email);
       return ctx.prisma.address.upsert({
         where: { email: ctx.session.user.email },
-        update: { ...input },
+        update: {
+          name: input.name,
+          address1: input.address1,
+          address2: input.address2,
+          city: input.city,
+          state_code: input.state_code,
+          country_code: input.country_code,
+          state_name: input.state_name,
+          country_name: input.country_name,
+          zip: input.zip,
+        },
         create: {
           email: ctx.session.user.email,
-          ...input,
+          name: input.name,
+          address1: input.address1,
+          address2: input.address2,
+          city: input.city,
+          state_code: input.state_code,
+          country_code: input.country_code,
+          state_name: input.state_name,
+          country_name: input.country_name,
+          zip: input.zip,
         },
       });
     }),

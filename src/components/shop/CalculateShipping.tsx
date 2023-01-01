@@ -73,7 +73,9 @@ const CalculateShipping: React.FC<CalculateShippingProps> = ({
       )}
       <div className="flex gap-2 p-2 text-zinc-200">
         <div className="font-virgil">w/ shipping:</div>
-        <p className="font-bold">{total}</p>
+        <p className="font-bold">
+          {total === "NaN" ? "Select Options" : total}
+        </p>
       </div>
     </div>
   );

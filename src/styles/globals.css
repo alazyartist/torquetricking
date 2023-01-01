@@ -1,7 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
+@layer utilities {
+  .no-scrollbar::--webkit-scrollbar {
+    display: none;
+  }
+}
 @layer base {
   @font-face {
     font-family: "Virgil";

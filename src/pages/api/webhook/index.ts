@@ -35,23 +35,6 @@ export default async function webhookHandler(
       event.data.object.id
     );
     switch (event.type) {
-      // case "checkout.session.completed":
-      // 	const session = event.data.object;
-      // 	// console.log(session.charges.data);
-      // 	const checkoutSessionDetails = await stripe.checkout.sessions.retrieve(
-      // 		session.id,
-      // 		{
-      // 			expand: ["line_items"],
-      // 		}
-      // 	);
-      // 	checkoutSessionDetails.line_items.data.map(async (itemDetails) => {
-      // 		console.log(itemDetails);
-      // 		if (itemDetails.description === "SessionReviewTest") {
-      // 			console.log("I AM GOING TO ADD A SESSION CREDIT");
-      // 		} else {
-      // 			console.log("You Need To Pay for That");
-      // 		}
-      // 	});
       case "payment_intent.created":
 
       //Code Below useful for testing. it is a copy of payment.intent.succeeded
@@ -87,7 +70,7 @@ export default async function webhookHandler(
           user_id: paymentIntent.metadata.user_id as string,
           paymentIntent: paymentIntent.id,
         });
-        console.log("orderDetails", orderDetails);
+        // console.log("orderDetails", orderDetails);
         caller.shop.buyNow({
           recipient: { ...orderDetails?.user.address },
           items: [orderDetails?.order.cart],
