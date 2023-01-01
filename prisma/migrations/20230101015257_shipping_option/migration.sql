@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `orders` ADD COLUMN `shipping` VARCHAR(191) NOT NULL DEFAULT 'STANDARD';

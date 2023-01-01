@@ -52,16 +52,24 @@ export default async function webhookHandler(
       // 		}
       // 	});
       case "payment_intent.created":
-        // console.log(event.data);
+        console.log("created", event.data);
+      // const orderDetailstest = await caller.shop.getOrderDetails({
+      //   user_id: paymentIntent.metadata.user_id as string,
+      //   paymentIntent: paymentIntent.id,
+      // });
+      // console.log("cart", orderDetailstest?.order.cart);
+      // const purchased = await caller.shop.buyNow({
+      //   recipient: { ...orderDetailstest?.user.address },
+      //   items: [orderDetailstest?.order.cart],
+      //   shipping: orderDetailstest?.order.shipping,
+      //   paymentIntent: paymentIntent.id,
+      // });
 
-        const orderDetailsCreated = await caller.shop.getOrderDetails({
-          user_id: paymentIntent.metadata.user_id as string,
-          paymentIntent: paymentIntent.id,
-        });
-        console.log("orderDetails", orderDetailsCreated);
+      // console.log("purchased", purchased);
+
       case "charge.succeeded":
         const charge = event.data.object;
-        console.log(charge);
+        // console.log(charge);
         break;
       case "payment_intent.succeeded":
         // Then define and call a function to handle the event payment_intent.succeeded
@@ -72,7 +80,14 @@ export default async function webhookHandler(
           paymentIntent: paymentIntent.id,
         });
         console.log("orderDetails", orderDetails);
-      // caller.shop.buyNow({recipient:,items[]})
+        caller.shop.buyNow({
+          recipient: { ...orderDetails?.user.address },
+          items: [orderDetails?.order.cart],
+          shipping: orderDetails?.order.shipping,
+          paymentIntent: paymentIntent.id,
+        });
+
+      //TODO add nodemailer fulfilment
       // ... handle other event types
       default:
         console.log(`Unhandled event type ${event.type}`);

@@ -63,6 +63,7 @@ model Orders{
   userId       String
   user          User @relation(fields:[userId], references: [id],onDelete: Cascade)
   paymentIntent String @unique
+  shipping      String @default("STANDARD")
   printful_id   String?
   amount        Int
   cart          Json @db.Json 

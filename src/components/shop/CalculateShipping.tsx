@@ -19,13 +19,14 @@ const CalculateShipping: React.FC<CalculateShippingProps> = ({
   setRecipient,
   total,
   setTotal,
+  shippingOption,
+  setShippingOption,
 }) => {
   const { data: countryCodes } = trpc.shop.getCountryCode.useQuery();
   const { mutateAsync: calculateShipping, data: shippingCost } =
     trpc.shop.calculateShipping.useMutation();
   const [selectedCode, selectCode] = useState("US");
   const [showCodes, setShowCodes] = useState(false);
-  const [shippingOption, setShippingOption] = useState();
   const handleSelect = (cC: CC) => {
     selectCode(cC.code);
     setShowCodes(false);

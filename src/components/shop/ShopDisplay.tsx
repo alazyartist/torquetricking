@@ -90,6 +90,7 @@ const CardOverlay: React.FC<CardOverlay> = ({ togglePopup, popup, id }) => {
   const [showForm, setShowForm] = useState(false);
   const [size, setSize] = useState<string>();
   const [total, setTotal] = useState(0);
+  const [shippingOption, setShippingOption] = useState<any>();
 
   const [recipient, setRecipient] = useState<Recipient>();
   useEffect(() => {
@@ -227,6 +228,8 @@ const CardOverlay: React.FC<CardOverlay> = ({ togglePopup, popup, id }) => {
         </div>
         <div className="col-start-3">
           <CalculateShipping
+            setShippingOption={setShippingOption}
+            shippingOption={shippingOption}
             total={total}
             setTotal={setTotal}
             variant={variant as SyncVariant}
@@ -244,6 +247,7 @@ const CardOverlay: React.FC<CardOverlay> = ({ togglePopup, popup, id }) => {
       {showForm && (
         <div className="absolute top-[0vh] left-[0vw] z-[10] h-[100%] w-[100%] rounded-md bg-zinc-900 bg-opacity-40 p-8 backdrop-blur-md">
           <PaymentEmbed
+            shippingOption={shippingOption}
             userDetails={userDetails}
             product={variant}
             creditAmount={total}

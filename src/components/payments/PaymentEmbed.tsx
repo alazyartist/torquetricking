@@ -8,6 +8,7 @@ const PaymentEmbed: React.FC<any> = ({
   creditAmount,
   userDetails,
   product,
+  shippingOption,
 }) => {
   const [stripePromise, setStripePromise] = useState<Promise<Stripe | null>>();
   const [clientSecret, setClientSecret] = useState<string | null>(null);
@@ -25,6 +26,7 @@ const PaymentEmbed: React.FC<any> = ({
       user_id: userDetails.user.id,
       amount: parseFloat(creditAmount),
       product: product,
+      shipping: shippingOption.id,
     });
   }, [creditAmount]);
   useEffect(() => {

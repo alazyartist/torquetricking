@@ -29,6 +29,7 @@ export const shopRouter = router({
         user_id: z.string().nullish(),
         product: z.any().nullish(),
         amount: z.number().nullish(),
+        shipping: z.string().nullish(),
       })
     )
     .mutation(async ({ input, ctx }) => {
@@ -56,6 +57,7 @@ export const shopRouter = router({
                 paymentIntent: paymentIntent.id,
                 amount: input.amount,
                 cart: input.product,
+                shipping: input.shipping,
               },
             },
           },
@@ -120,8 +122,9 @@ export const shopRouter = router({
     .input(
       z
         .object({
-          variant: z.any(),
+          items: z.any(),
           recipient: z.any(),
+          paymentIntent: z.string(),
           // {
           //   name: z.string(),
           //   address1: z.string(),
@@ -134,17 +137,22 @@ export const shopRouter = router({
         })
         .nullish()
     )
-    .mutation(async (input) => {
+    .mutation(async ({ input, ctx }) => {
       // console.log(input.input?.variant);
-      let v = input.input?.variant;
-      let r = input.input?.recipient;
+      let items = input?.items;
+      let r = input?.recipient;
       try {
         const data = await printfulApi.post(
           "/orders",
-          { items: [v], recipient: r },
+          { items: items, recipient: r },
           { withCredentials: true }
         );
-        console.log(data);
+        console.log("purchased(buyNow)", data.data.result);
+        const updateOrder = await ctx.prisma.orders.update({
+          where: { paymentIntent: input?.paymentIntent },
+          data: { printful_id: data.data.result.id.toString() },
+        });
+        console.log(updateOrder);
       } catch (err) {
         console.log(err);
       }
