@@ -43,7 +43,7 @@ const AddressForm: React.FC<any> = ({ showAddress }) => {
     }
   }, [userDetails]);
   return (
-    <div className="w-[30vw]">
+    <div className="w-full md:w-[30vw]">
       <form
         onSubmit={handleSubmit}
         className="flex flex-col gap-2 text-zinc-900"
