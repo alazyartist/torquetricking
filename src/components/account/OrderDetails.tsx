@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { SyncVariant } from "../../types/SyncVariant";
 import { trpc } from "../../utils/trpc";
 interface OrderDetails {
@@ -16,12 +16,14 @@ const OrderDetails = () => {
   const { data: userOrders } = trpc.auth.getUserOrders.useQuery();
   console.log(userOrders);
   return (
-    <div>
-      <div className="text-bold text-xl">OrderDetails</div>
+    <div className="h-full w-full">
+      <div className="mt-2 font-inter text-3xl font-black text-zinc-300">
+        Order Details
+      </div>
       <div className="flex flex-col gap-2">
         {userOrders &&
           userOrders
-            ?.sort((a, b) => {
+            ?.sort((a: OrderDetails, b: OrderDetails) => {
               a.createdAt > b.createdAt ? -1 : 1;
             })
             .filter((order: OrderDetails) => order.printful_id !== null)
@@ -33,16 +35,42 @@ const OrderDetails = () => {
   );
 };
 
-const IndividualOrder = ({ order }: OrderDetails) => {
+const IndividualOrder = ({ order }: any) => {
   console.log(order);
+  const [showMore, setShowMore] = useState(false);
   return (
-    <div className="flex max-w-full gap-4 rounded-md bg-zinc-900 bg-opacity-20 p-2">
-      <div>{new Date(order.createdAt).toLocaleDateString()}</div>
-      <div className="">{order.amount}$</div>
-      <div className="min-w-[30%]">{order.cart?.name}</div>
-      <div>{order.printful_id}</div>
-      <div>{order.paymentIntent}</div>
-    </div>
+    <>
+      <div className="rounded-md bg-zinc-900 bg-opacity-20">
+        <div
+          onClick={() => setShowMore(!showMore)}
+          className="flex place-content-center place-items-center gap-4 p-2"
+        >
+          <div className="">
+            {new Date(order.createdAt).toLocaleDateString()}
+          </div>
+          <div className="">{order.amount}$</div>
+          <div className="min-w-[30%]">{order.cart?.name}</div>
+          <div className="overflow-y-scroll p-1">
+            {order.printful_id}
+            <br />
+            {order.paymentIntent}
+          </div>
+        </div>
+        {showMore && (
+          <div className="flex w-full place-content-start place-items-center gap-2 p-2">
+            <div>
+              <img
+                className="rounded-md"
+                width={100}
+                height={100}
+                src={order.cart.files[order.cart.files.length - 1].preview_url}
+              />
+            </div>
+            <div>{order.cart.name}</div>
+          </div>
+        )}
+      </div>
+    </>
   );
 };
 export default OrderDetails;
