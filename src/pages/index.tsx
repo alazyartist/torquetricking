@@ -16,12 +16,12 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="no-scrollbar bg-grandeur relative mx-auto flex h-screen min-h-screen flex-col content-start items-center p-4 font-virgil">
-        <h1 className="font-inter text-5xl font-black leading-normal text-gray-300 md:text-[5rem]">
+        <h1 className="font-inter text-5xl font-black leading-tight text-gray-300 md:text-[5rem]">
           Torque <span className="text-cyan-500">Tricking</span>
         </h1>
-        <p className="text-2xl text-gray-300">
+        {/* <p className="text-2xl text-gray-300">
           Welcome to our work in progress:
-        </p>
+        </p> */}
         <Link href={"shop"}>
           <span className="font-titan text-3xl text-zinc-300"> Shop</span>
         </Link>
@@ -31,9 +31,7 @@ const Home: NextPage = () => {
         <Link href={"account"}>
           <span className="font-titan text-3xl text-zinc-300"> Account</span>
         </Link>
-        <div className="flex w-full items-center justify-center pt-6 text-2xl text-blue-500">
-          {hello.data ? <p>{hello.data.greeting}</p> : <p>Loading..</p>}
-        </div>
+        <div className="flex w-full items-center justify-center pt-6 text-2xl text-blue-500"></div>
         <AuthShowcase />
       </main>
     </>
@@ -49,11 +47,11 @@ const AuthShowcase: React.FC = () => {
 
   return (
     <div className=" flex flex-col items-center justify-center gap-2">
-      {sessionData && (
+      {/* {sessionData && (
         <p className="text-2xl text-zinc-300">
           Logged in as {sessionData?.user?.email}
         </p>
-      )}
+      )} */}
 
       <button
         className={`absolute bottom-5 left-5 rounded-md border border-black bg-violet-50  ${

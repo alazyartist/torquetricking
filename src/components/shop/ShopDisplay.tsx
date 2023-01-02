@@ -89,7 +89,7 @@ const CardOverlay: React.FC<CardOverlay> = ({ togglePopup, popup, id }) => {
   const [variant, setVariant] = useState<SyncVariant | undefined>();
   const [showForm, setShowForm] = useState(false);
   const [size, setSize] = useState<string>();
-  const [total, setTotal] = useState(0);
+  const [total, setTotal] = useState<number | string>(0);
   const [shippingOption, setShippingOption] = useState<any>();
 
   const [recipient, setRecipient] = useState<Recipient>();
@@ -106,7 +106,7 @@ const CardOverlay: React.FC<CardOverlay> = ({ togglePopup, popup, id }) => {
   }, [item]);
 
   const { mutateAsync: buyNow } = trpc.shop.buyNow.useMutation();
-  const { data: userDetails } = trpc.auth.getUserDetails.useQuery();
+  const { data: userDetails, isError } = trpc.auth.getUserDetails.useQuery();
   //Move this to api call for after stripe process is completed
   const handleBuy = async () => {
     // buyNow({
@@ -228,6 +228,7 @@ const CardOverlay: React.FC<CardOverlay> = ({ togglePopup, popup, id }) => {
         </div>
         <div className="col-start-3">
           <CalculateShipping
+            isError={isError}
             setShippingOption={setShippingOption}
             shippingOption={shippingOption}
             total={total}
