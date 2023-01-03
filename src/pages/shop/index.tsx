@@ -3,7 +3,10 @@ import Head from "next/head";
 import Link from "next/link";
 import type { NextPage } from "next";
 import ShopDisplay from "../../components/shop/ShopDisplay";
+import CartIcon from "../../components/shop/CartIcon";
+import { useCart } from "../../components/shop/CartStore";
 const Shop: NextPage = () => {
+  const cart = useCart((s) => s.cart);
   return (
     <>
       <Head>
@@ -20,6 +23,7 @@ const Shop: NextPage = () => {
           <button className="font-titan text-3xl text-zinc-300">Home</button>
         </Link>
         <ShopDisplay />
+        <CartIcon cart={cart} />
       </main>
     </>
   );

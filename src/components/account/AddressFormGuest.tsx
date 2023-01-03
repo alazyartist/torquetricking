@@ -4,7 +4,8 @@ import { FaAddressCard, FaCheckCircle } from "react-icons/fa";
 
 import { trpc } from "../../utils/trpc";
 import { Recipient } from "../shop/ShopDisplay";
-const AddressForm: React.FC<any> = ({ showAddress }) => {
+import { useCart } from "../shop/CartStore";
+const AddressFormGuest: React.FC<any> = ({ showAddress }) => {
   const [address, setAddress] = useState<any | Recipient | undefined>({
     country_code: "US",
     address1: "",
@@ -13,12 +14,7 @@ const AddressForm: React.FC<any> = ({ showAddress }) => {
     country_name: "United States ",
   });
   const { data: userDetails } = trpc.auth.getUserDetails.useQuery();
-  const {
-    mutateAsync: saveAddress,
-    isSuccess,
-    isError,
-    status,
-  } = trpc.auth.setUserDetails.useMutation();
+  const saveAddress = useCart((s) => s.setAddress);
   const { data: countryCodes } = trpc.shop.getCountryCode.useQuery();
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -43,7 +39,7 @@ const AddressForm: React.FC<any> = ({ showAddress }) => {
     }
   }, [userDetails]);
   return (
-    <div className="w-full md:w-[30vw]">
+    <div className="h-full w-full md:w-[30vw]">
       <form
         onSubmit={handleSubmit}
         className="flex flex-col gap-2 text-zinc-900"
@@ -57,7 +53,7 @@ const AddressForm: React.FC<any> = ({ showAddress }) => {
         {status === "error" && (
           <MdClose className="place-self-center fill-red-500 text-5xl" />
         )}
-        <label className="flex flex-col">
+        <label className=" flex flex-col text-zinc-300">
           Name
           <input
             autoComplete="name"
@@ -67,7 +63,7 @@ const AddressForm: React.FC<any> = ({ showAddress }) => {
             onChange={(e) => setAddress({ ...address, name: e.target.value })}
           />
         </label>
-        <label className="flex flex-col">
+        <label className=" flex flex-col text-zinc-300">
           Address <span className="text-xs">line-1</span>
           <input
             autoComplete="address-line1"
@@ -79,8 +75,8 @@ const AddressForm: React.FC<any> = ({ showAddress }) => {
             }
           />
         </label>
-        <label className="flex flex-col">
-          Address
+        <label className=" flex flex-col text-zinc-300">
+          Address <span className="text-xs">line-2</span>
           <input
             autoComplete="address-line2"
             className="rounded-md bg-opacity-30 p-2"
@@ -91,7 +87,7 @@ const AddressForm: React.FC<any> = ({ showAddress }) => {
             }
           />
         </label>
-        <label className="flex flex-col">
+        <label className=" flex flex-col text-zinc-300">
           City
           <input
             className="rounded-md bg-opacity-30 p-2"
@@ -101,7 +97,7 @@ const AddressForm: React.FC<any> = ({ showAddress }) => {
           />
         </label>
 
-        <label className="flex flex-col">
+        <label className=" flex flex-col text-zinc-300">
           Zip Code
           <input
             className="rounded-md bg-opacity-30 p-2"
@@ -111,7 +107,7 @@ const AddressForm: React.FC<any> = ({ showAddress }) => {
           />
         </label>
 
-        <label className="flex flex-col">
+        <label className=" flex flex-col text-zinc-300">
           State
           <select
             className="rounded-md bg-opacity-30 p-2"
@@ -130,7 +126,7 @@ const AddressForm: React.FC<any> = ({ showAddress }) => {
               ))}
           </select>
         </label>
-        <label className="flex flex-col">
+        <label className=" flex flex-col text-zinc-300">
           Country
           <select
             className="rounded-md bg-opacity-30 p-2"
@@ -161,4 +157,4 @@ const AddressForm: React.FC<any> = ({ showAddress }) => {
     </div>
   );
 };
-export default AddressForm;
+export default AddressFormGuest;

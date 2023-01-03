@@ -121,7 +121,7 @@ const CardOverlay: React.FC<CardOverlay> = ({ togglePopup, popup, id }) => {
     setRecipient(userDetails);
   });
   return (
-    <div className="no-scrollbar fixed top-[5vh] left-[5vw] z-20 flex h-[90vh] w-[90vw] flex-col items-center overflow-y-auto rounded-md bg-zinc-900 bg-opacity-80 p-2 text-zinc-300 drop-shadow-2xl ">
+    <div className="no-scrollbar fixed top-[2.5vh] left-[2.5vw] z-20 flex h-[95vh] w-[95vw] flex-col items-center overflow-y-auto rounded-md bg-zinc-900 bg-opacity-80 p-2 text-zinc-300 drop-shadow-2xl ">
       <MdClose
         className="absolute top-2 right-2 z-[1000] text-3xl text-zinc-300"
         onClick={() => {
