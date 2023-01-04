@@ -50,4 +50,54 @@ export const authRouter = router({
         },
       });
     }),
+  createGuestUser: publicProcedure
+    .input(z.any())
+    .mutation(async ({ input, ctx }) => {
+      console.log(input);
+      let user = await ctx.prisma.user.findUnique({
+        where: { email: input.email },
+      });
+      if (user) {
+        console.log(user);
+        user;
+      } else {
+        user = await ctx.prisma.user.create({
+          data: {
+            email: input.email,
+            name: input.name,
+          },
+        });
+      }
+
+      console.log(user);
+      let updateAddress = await ctx.prisma.address.upsert({
+        where: { email: input.email },
+        update: {
+          name: input.name,
+          address1: input.address1,
+          address2: input.address2,
+          city: input.city,
+          state_code: input.state_code,
+          country_code: input.country_code,
+          state_name: input.state_name,
+          country_name: input.country_name,
+          zip: input.zip,
+        },
+        create: {
+          email: input.email,
+          name: input.name,
+          address1: input.address1,
+          address2: input.address2,
+          city: input.city,
+          state_code: input.state_code,
+          country_code: input.country_code,
+          state_name: input.state_name,
+          country_name: input.country_name,
+          zip: input.zip,
+        },
+      });
+
+      return { user, address: updateAddress };
+      console.log(updateAddress);
+    }),
 });

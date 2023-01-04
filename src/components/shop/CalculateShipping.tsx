@@ -16,6 +16,7 @@ interface CalculateShippingProps {
   setShippingOption: any;
   setTotal: any;
   isError: any;
+  createUser: any;
 }
 interface CC {
   name: string;
@@ -30,6 +31,7 @@ const CalculateShipping: React.FC<CalculateShippingProps> = ({
   shippingOption,
   setShippingOption,
   isError,
+  createUser,
 }) => {
   const { data: countryCodes } = trpc.shop.getCountryCode.useQuery();
   const { mutateAsync: calculateShipping, data: shippingCost } =
@@ -100,17 +102,22 @@ const CalculateShipping: React.FC<CalculateShippingProps> = ({
             </>
           ) : (
             <>
-              <div className="font-virgil">w/ shipping:</div>
-              <p className="font-bold">
-                {/* @ts-ignore */}
-                {total === "NaN" ? "Select Options" : total}
-              </p>
+              <div className="flex gap-2">
+                <p className="font-virgil">w/ shipping:</p>
+                <p className="font-inter font-bold">
+                  {/* @ts-ignore */}
+                  {total === "NaN" ? "Select Options" : total}
+                </p>
+              </div>
             </>
           )}
         </div>
         {openAddressForm && (
           <div className="absolute top-[0] left-[0] h-[95vh] w-[95vw] bg-zinc-900 p-2 text-zinc-300 ">
-            <AddressFormGuest showAddress={setOpenAddressForm} />
+            <AddressFormGuest
+              createUser={createUser}
+              showAddress={setOpenAddressForm}
+            />
           </div>
         )}
       </div>

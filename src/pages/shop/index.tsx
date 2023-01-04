@@ -1,12 +1,17 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Head from "next/head";
 import Link from "next/link";
 import type { NextPage } from "next";
 import ShopDisplay from "../../components/shop/ShopDisplay";
 import CartIcon from "../../components/shop/CartIcon";
 import { useCart } from "../../components/shop/CartStore";
+import CartDisplay from "../../components/shop/CartDisplay";
 const Shop: NextPage = () => {
   const cart = useCart((s) => s.cart);
+  const [cartOpen, setCartOpen] = useState(false);
+  useEffect(() => {
+    console.log(cart);
+  }, [cart]);
   return (
     <>
       <Head>
@@ -23,7 +28,8 @@ const Shop: NextPage = () => {
           <button className="font-titan text-3xl text-zinc-300">Home</button>
         </Link>
         <ShopDisplay />
-        <CartIcon cart={cart} />
+        <CartIcon cart={cart} setCartOpen={setCartOpen} />
+        {cartOpen && <CartDisplay cart={cart} />}
       </main>
     </>
   );

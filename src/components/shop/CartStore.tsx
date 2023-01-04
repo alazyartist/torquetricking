@@ -7,9 +7,13 @@ interface Store {
   addToCart: (value: SyncVariant) => void;
   removeFromCart: (value: number) => void;
   setAddress: (value: Recipient) => void;
+  guestUser: { id: string; name: string; email: string };
+  setGuestUser: (value: { id: string; name: string; email: string }) => void;
 }
 
 export const useCart = create<Store>((set, get) => ({
+  guestUser: { id: "", email: "", name: "" },
+  setGuestUser: (value) => set(() => ({ guestUser: value })),
   cart: [],
   addToCart: (value: SyncVariant) =>
     set((state) => ({ cart: [...state.cart, value] })),
