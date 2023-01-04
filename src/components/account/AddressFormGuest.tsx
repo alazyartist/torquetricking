@@ -5,23 +5,28 @@ import { FaAddressCard, FaCheckCircle } from "react-icons/fa";
 import { trpc } from "../../utils/trpc";
 import { Recipient } from "../shop/ShopDisplay";
 import { useCart } from "../shop/CartStore";
-const AddressFormGuest: React.FC<any> = ({ showAddress }) => {
+const AddressFormGuest: React.FC<any> = ({ showAddress, createUser }) => {
   const [address, setAddress] = useState<any | Recipient | undefined>({
     country_code: "US",
     address1: "",
     address2: "",
     city: "",
     country_name: "United States ",
+    email: "",
   });
+
   const { data: userDetails } = trpc.auth.getUserDetails.useQuery();
-  const saveAddress = useCart((s) => s.setAddress);
+  const setGuestUser = useCart((s) => s.setGuestUser);
+  const saveAddressLocal = useCart((s) => s.setAddress);
   const { data: countryCodes } = trpc.shop.getCountryCode.useQuery();
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     console.log("save", address);
-    saveAddress(address);
+    saveAddressLocal(address);
+    createUser(address);
     showAddress(false);
   };
+
   const [states, setStates] = useState<any>();
   useEffect(() => {
     setStates(
@@ -29,6 +34,7 @@ const AddressFormGuest: React.FC<any> = ({ showAddress }) => {
         .states
     );
   }, [countryCodes, address]);
+
   useEffect(() => {
     if (userDetails) {
       setAddress({ ...userDetails });
@@ -38,6 +44,16 @@ const AddressFormGuest: React.FC<any> = ({ showAddress }) => {
       document.getElementById("country").value = userDetails?.country_code;
     }
   }, [userDetails]);
+
+  let disableSave =
+    address.email === "" ||
+    address.address1 === "" ||
+    address.name === "" ||
+    address.city === "" ||
+    address.state_code === "" ||
+    address.state_name === "" ||
+    address.zip === "" ||
+    address.country_code === "";
   return (
     <div className="h-full w-full md:w-[30vw]">
       <form
@@ -53,6 +69,16 @@ const AddressFormGuest: React.FC<any> = ({ showAddress }) => {
         {status === "error" && (
           <MdClose className="place-self-center fill-red-500 text-5xl" />
         )}
+        <label className=" flex flex-col text-zinc-300">
+          Email
+          <input
+            autoComplete="email"
+            className="rounded-md bg-opacity-30 p-2"
+            type={"text"}
+            value={address?.email}
+            onChange={(e) => setAddress({ ...address, email: e.target.value })}
+          />
+        </label>
         <label className=" flex flex-col text-zinc-300">
           Name
           <input
@@ -108,6 +134,18 @@ const AddressFormGuest: React.FC<any> = ({ showAddress }) => {
         </label>
 
         <label className=" flex flex-col text-zinc-300">
+          State Name
+          <input
+            className="rounded-md bg-opacity-30 p-2"
+            type={"text"}
+            value={address?.state_name}
+            onChange={(e) =>
+              setAddress({ ...address, state_name: e.target.value })
+            }
+          />
+        </label>
+
+        <label className=" flex flex-col text-zinc-300">
           State
           <select
             className="rounded-md bg-opacity-30 p-2"
@@ -148,10 +186,15 @@ const AddressFormGuest: React.FC<any> = ({ showAddress }) => {
           </select>
         </label>
         <button
-          className="w-fit place-self-center rounded-xl bg-zinc-800 px-4 py-2 text-2xl text-zinc-200"
+          disabled={disableSave}
+          className={`w-fit place-self-center rounded-xl bg-zinc-800 px-4 py-2 ${
+            disableSave
+              ? "bg-red-500 text-lg text-zinc-200"
+              : "bg-emerald-500 text-2xl text-zinc-200"
+          }`}
           type="submit"
         >
-          Save
+          {!disableSave ? "Save" : "Complete Form to Save"}
         </button>
       </form>
     </div>

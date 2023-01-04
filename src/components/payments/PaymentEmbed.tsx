@@ -23,7 +23,7 @@ const PaymentEmbed: React.FC<any> = ({
   useEffect(() => {
     console.log(creditAmount, userDetails);
     paymentIntent({
-      user_id: userDetails.user.id,
+      user_id: userDetails,
       amount: parseFloat(creditAmount),
       product: product,
       shipping: shippingOption.id,
