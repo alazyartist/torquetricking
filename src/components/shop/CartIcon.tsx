@@ -6,8 +6,8 @@ const CartIcon: React.FC<{ cart: Array<any>; setCartOpen: any }> = ({
 }) => {
   return (
     <div
-      onClick={() => setCartOpen((prev) => !prev)}
-      className="fixed top-20 right-0 z-[100] h-10 w-14 rounded-md rounded-r-none bg-zinc-300 bg-opacity-70 p-2"
+      onClick={() => setCartOpen((prev: boolean) => !prev)}
+      className="fixed top-20 right-0 z-[100] h-10 w-14 rounded-md rounded-r-none bg-zinc-300 bg-opacity-40 p-2 drop-shadow-md backdrop-blur-sm"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
