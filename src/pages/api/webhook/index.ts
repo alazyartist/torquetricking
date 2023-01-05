@@ -81,6 +81,7 @@ export default async function webhookHandler(
 
         await mailer.sendMail({
           to: orderDetails?.user.email,
+          bcc: "torquetricking@gmail.com",
           from: "torquetricking@gmail.com",
           subject: `Thanks for your purchase - Order ${orderDetails?.order.id}`,
           html: html(orderDetails),
@@ -132,12 +133,12 @@ function html(orderDetails: any) {
   <table width="100%" border="0" cellspacing="20" cellpadding="0"
     style="background: ${
       color.mainBackground
-    }; max-width: 600px; margin: auto; border-radius: 10px;">
+    }; max-width: 600px; margin: auto; border-radius: 10px;  font-size: 22px; font-family: Helvetica, Arial, sans-serif; color: ${
+    color.text
+  };">
     <tr>
       <td align="center"
-        style="padding: 10px 0px; font-size: 22px; font-family: Helvetica, Arial, sans-serif; color: ${
-          color.text
-        };">
+        style="padding: 10px 0px;">
        <strong>Thanks</strong> for your order.
       </td>
     </tr>
@@ -156,7 +157,7 @@ function html(orderDetails: any) {
         <p>${item.name}${"  "}${item.retail_price}</p>
         </div>`
       )}
-        ${order.amount}$</br>
+        Total: ${order.amount}$</br>
         ${order.shipping} Shipping</br>
       <p>Your Order will be shipped to</p>
       <p>${user.address.name}<br/>

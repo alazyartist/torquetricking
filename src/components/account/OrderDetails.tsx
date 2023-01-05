@@ -50,8 +50,7 @@ const IndividualOrder = ({ order }: any) => {
           </div>
           <div className="">{order.amount}$</div>
           <div className="min-w-[30%]">
-            {order.cart?.name ||
-              order.cart.map((item) => <div>{item.name}</div>)}
+            {order.cart?.name || order.cart.length}
           </div>
           <div className="overflow-y-scroll p-1">
             {order.printful_id}
@@ -60,13 +59,14 @@ const IndividualOrder = ({ order }: any) => {
           </div>
         </div>
         {showMore &&
-          order.cart?.map((item) => (
+          order.cart?.map((item: SyncVariant) => (
             <div className="flex w-full place-content-start place-items-center gap-2 p-2">
               <div>
                 <img
                   className="rounded-md"
                   width={100}
                   height={100}
+                  //   @ts-ignore
                   src={item.files[item.files.length - 1].preview_url}
                 />
               </div>

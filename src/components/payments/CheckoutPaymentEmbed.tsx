@@ -33,7 +33,7 @@ const CheckoutPaymentEmbed: React.FC<CheckoutOptions> = ({
     console.log(cartTotal, user_id);
     createCheckoutSession({
       user_id: user_id,
-      amount: cartTotal,
+      amount: parseFloat(cartTotal),
       cart: cart,
     });
   }, [cartTotal]);
