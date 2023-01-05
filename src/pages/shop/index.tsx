@@ -29,7 +29,7 @@ const Shop: NextPage = () => {
         </Link>
         <ShopDisplay />
         <CartIcon cart={cart} setCartOpen={setCartOpen} />
-        {cartOpen && <CartDisplay cart={cart} />}
+        {cartOpen && <CartDisplay setCartOpen={setCartOpen} cart={cart} />}
       </main>
     </>
   );

@@ -9,12 +9,14 @@ interface Store {
   setAddress: (value: Recipient) => void;
   guestUser: { id: string; name: string; email: string };
   setGuestUser: (value: { id: string; name: string; email: string }) => void;
+  clearCart: () => void;
 }
 
 export const useCart = create<Store>((set, get) => ({
   guestUser: { id: "", email: "", name: "" },
   setGuestUser: (value) => set(() => ({ guestUser: value })),
   cart: [],
+  clearCart: () => set(() => ({ cart: [] })),
   addToCart: (value: SyncVariant) =>
     set((state) => ({ cart: [...state.cart, value] })),
   removeFromCart: (value: number) =>
@@ -22,6 +24,7 @@ export const useCart = create<Store>((set, get) => ({
       cart: [...state.cart].filter((item, i) => i !== value),
     })),
   address: {
+    id: "",
     address1: "",
     name: "",
     address2: "",

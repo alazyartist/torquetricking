@@ -16,7 +16,6 @@ const AddressFormGuest: React.FC<any> = ({ showAddress, createUser }) => {
   });
 
   const { data: userDetails } = trpc.auth.getUserDetails.useQuery();
-  const setGuestUser = useCart((s) => s.setGuestUser);
   const saveAddressLocal = useCart((s) => s.setAddress);
   const { data: countryCodes } = trpc.shop.getCountryCode.useQuery();
   const handleSubmit = (e: FormEvent) => {
@@ -73,8 +72,8 @@ const AddressFormGuest: React.FC<any> = ({ showAddress, createUser }) => {
           Email
           <input
             autoComplete="email"
-            className="rounded-md bg-opacity-30 p-2"
-            type={"text"}
+            className="rounded-md bg-opacity-30 p-2 text-zinc-800"
+            type={"email"}
             value={address?.email}
             onChange={(e) => setAddress({ ...address, email: e.target.value })}
           />

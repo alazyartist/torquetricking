@@ -73,7 +73,7 @@ export default async function webhookHandler(
         // console.log("orderDetails", orderDetails);
         caller.shop.buyNow({
           recipient: { ...orderDetails?.user.address },
-          items: [orderDetails?.order.cart],
+          items: orderDetails?.order.cart,
           shipping: orderDetails?.order.shipping,
           paymentIntent: paymentIntent.id,
         });
@@ -118,7 +118,7 @@ function html(orderDetails) {
   let { user, order } = orderDetails;
   console.log(
     "htmlOrderPreview",
-    orderDetails.order.cart.files[orderDetails.order.cart.files.length - 1]
+    orderDetails.order.cart.map(item=>item.files[item.files.length - 1]
       .preview_url
   );
   const brandColor = "#06b6d4";
@@ -174,11 +174,12 @@ function html(orderDetails) {
       <td align="center" style="padding: 20px 0;">
         <table border="0" cellspacing="0" cellpadding="0">
         <tr>
-        <td>
+       {order.cart.map(item)=>
+         <td>
         <img src="${
-          order.cart.files[order.cart.files.length - 1].preview_url
+         item.files[item.files.length - 1].preview_url
         }" alt="Product image" />
-        </td>
+        </td>}
         </tr>
           <tr>
             <td align="center" style="border-radius: 5px;" bgcolor="${

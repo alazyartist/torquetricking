@@ -4,7 +4,7 @@ import { trpc } from "../../utils/trpc";
 interface OrderDetails {
   id: string;
   amount: number;
-  cart: SyncVariant;
+  cart: SyncVariant[];
   createdAt: any;
   paymentIntent: string;
   printful_id: string | null;
@@ -49,26 +49,30 @@ const IndividualOrder = ({ order }: any) => {
             {new Date(order.createdAt).toLocaleDateString()}
           </div>
           <div className="">{order.amount}$</div>
-          <div className="min-w-[30%]">{order.cart?.name}</div>
+          <div className="min-w-[30%]">
+            {order.cart?.name ||
+              order.cart.map((item) => <div>{item.name}</div>)}
+          </div>
           <div className="overflow-y-scroll p-1">
             {order.printful_id}
             <br />
             {order.paymentIntent}
           </div>
         </div>
-        {showMore && (
-          <div className="flex w-full place-content-start place-items-center gap-2 p-2">
-            <div>
-              <img
-                className="rounded-md"
-                width={100}
-                height={100}
-                src={order.cart.files[order.cart.files.length - 1].preview_url}
-              />
+        {showMore &&
+          order.cart?.map((item) => (
+            <div className="flex w-full place-content-start place-items-center gap-2 p-2">
+              <div>
+                <img
+                  className="rounded-md"
+                  width={100}
+                  height={100}
+                  src={item.files[item.files.length - 1].preview_url}
+                />
+              </div>
+              <div>{item.name}</div>
             </div>
-            <div>{order.cart.name}</div>
-          </div>
-        )}
+          ))}
       </div>
     </>
   );

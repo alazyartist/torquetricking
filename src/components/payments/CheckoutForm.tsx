@@ -4,10 +4,11 @@ import {
   useStripe,
   useElements,
 } from "@stripe/react-stripe-js";
-const CheckoutForm: React.FC<any> = ({ setShowForm }) => {
+import { useCart } from "../shop/CartStore";
+const CheckoutForm: React.FC<any> = ({ setShowForm, setCartOpen }) => {
   const stripe = useStripe();
   const elements = useElements();
-
+  const clearCart = useCart((s) => s.clearCart);
   const [message, setMessage] = useState<string>();
   const [isProcessing, setIsProcessing] = useState<boolean>();
 
@@ -29,13 +30,15 @@ const CheckoutForm: React.FC<any> = ({ setShowForm }) => {
     } else if (paymentIntent && paymentIntent.status === "succeeded") {
       setMessage("Payment Status:" + paymentIntent.status);
       setShowForm(false);
+      clearCart();
+      setCartOpen && setCartOpen(false);
     }
     setIsProcessing(false);
   };
   return (
     <>
       <form
-        className="grid place-items-center gap-8"
+        className="grid place-items-center gap-4"
         id="payment-form"
         onSubmit={handleSubmit}
       >
@@ -46,7 +49,7 @@ const CheckoutForm: React.FC<any> = ({ setShowForm }) => {
           disabled={isProcessing}
           id="submit"
         >
-          {isProcessing ? "Processing" : "Buy Now"}
+          {isProcessing ? "Processing" : "Pay Now"}
         </button>
         <button
           onClick={() => setShowForm(false)}
