@@ -7,8 +7,10 @@ interface Store {
   addToCart: (value: SyncVariant) => void;
   removeFromCart: (value: number) => void;
   setAddress: (value: Recipient) => void;
-  guestUser: { id: string; name: string; email: string };
-  setGuestUser: (value: { id: string; name: string; email: string }) => void;
+  guestUser: { id: string; name: string; email: string } | any;
+  setGuestUser: (
+    value: { id: string; name: string; email: string } | any
+  ) => void;
   clearCart: () => void;
 }
 

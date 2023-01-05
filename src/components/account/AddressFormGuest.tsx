@@ -44,7 +44,7 @@ const AddressFormGuest: React.FC<any> = ({ showAddress, createUser }) => {
     }
   }, [userDetails]);
 
-  let disableSave =
+  const disableSave =
     address.email === "" ||
     address.address1 === "" ||
     address.name === "" ||
@@ -159,7 +159,9 @@ const AddressFormGuest: React.FC<any> = ({ showAddress, createUser }) => {
           >
             {states &&
               states?.map((option: { code: string; name: string }) => (
-                <option value={option.code}>{option.name}</option>
+                <option key={option.code} value={option.code}>
+                  {option.name}
+                </option>
               ))}
           </select>
         </label>
@@ -179,7 +181,9 @@ const AddressFormGuest: React.FC<any> = ({ showAddress, createUser }) => {
             {countryCodes &&
               countryCodes?.result?.map(
                 (option: { code: string; name: string }) => (
-                  <option value={option.code}>{option.name}</option>
+                  <option key={option.code} value={option.code}>
+                    {option.name}
+                  </option>
                 )
               )}
           </select>

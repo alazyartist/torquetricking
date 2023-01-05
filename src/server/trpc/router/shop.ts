@@ -198,8 +198,8 @@ export const shopRouter = router({
     )
     .mutation(async ({ input, ctx }) => {
       // console.log(input.input?.variant);
-      let items = input?.items;
-      let r = input?.recipient;
+      const items = input?.items;
+      const r = input?.recipient;
       try {
         const data = await printfulApi.post(
           "/orders",

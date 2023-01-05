@@ -2,9 +2,8 @@ import React, { useEffect, useState } from "react";
 import { trpc } from "../../utils/trpc";
 import { SyncVariant } from "../../types/SyncVariant";
 import { Recipient } from "./ShopDisplay";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { useCart } from "./CartStore";
-import AddressForm from "../account/AddressForm";
 import AddressFormGuest from "../account/AddressFormGuest";
 
 interface CalculateShippingProps {
@@ -33,7 +32,6 @@ const CalculateShipping: React.FC<CalculateShippingProps> = ({
   isError,
   createUser,
 }) => {
-  const { data: countryCodes } = trpc.shop.getCountryCode.useQuery();
   const { mutateAsync: calculateShipping, data: shippingCost } =
     trpc.shop.calculateShipping.useMutation();
   const [selectedCode, selectCode] = useState("US");
@@ -75,6 +73,7 @@ const CalculateShipping: React.FC<CalculateShippingProps> = ({
           >
             {shippingCost?.result.map((option: any) => (
               <option
+                key={option.code}
                 value={JSON.stringify(option)}
                 className="flex w-full max-w-[80vw] justify-between"
               >

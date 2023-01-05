@@ -3,7 +3,7 @@ import Stripe from "stripe";
 import { env } from "../../../env/server.mjs";
 import { buffer } from "micro";
 import { createContext } from "../../../server/trpc/context";
-
+import { prisma } from "../../../server/db/client.js";
 import { appRouter } from "../../../server/trpc/router/_app";
 import { mailer } from "../../../utils/nodemailer";
 import { SyncVariant } from "../../../types/SyncVariant.js";
@@ -67,10 +67,10 @@ export default async function webhookHandler(
         // Then define and call a function to handle the event payment_intent.succeeded
         // console.log(line_items);
         console.log(paymentIntent.metadata);
-        const orderDetails = await caller.shop.getOrderDetails({
+        const orderDetails = (await caller.shop.getOrderDetails({
           user_id: paymentIntent.metadata.user_id as string,
           paymentIntent: paymentIntent.id,
-        });
+        })) as any;
         // console.log("orderDetails", orderDetails);
         caller.shop.buyNow({
           recipient: { ...orderDetails?.user.address },
@@ -109,7 +109,7 @@ export default async function webhookHandler(
 
 function html(orderDetails: any) {
   console.log("htmlOrderEmail", orderDetails);
-  let { user, order } = orderDetails;
+  const { user, order } = orderDetails;
   console.log(
     "htmlOrderPreview",
     orderDetails.order.cart.map(

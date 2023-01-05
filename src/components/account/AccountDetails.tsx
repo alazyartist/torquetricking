@@ -1,5 +1,5 @@
 import { User } from "next-auth";
-import { FaAddressCard, FaCheckCircle } from "react-icons/fa";
+import { FaAddressCard } from "react-icons/fa";
 import React, { useState } from "react";
 import AddressForm from "./AddressForm";
 import OrderDetails from "./OrderDetails";

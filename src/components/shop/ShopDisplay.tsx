@@ -29,7 +29,6 @@ interface Product {
 
 const ShopDisplay: React.FC = () => {
   const { data: products } = trpc.shop.getItems.useQuery();
-  useEffect(() => {}, [products]);
 
   return (
     <div className="grid grid-cols-3 gap-4 md:grid-cols-4">
@@ -81,8 +80,8 @@ interface CardOverlay {
 const CardOverlay: React.FC<CardOverlay> = ({ togglePopup, popup, id }) => {
   const { data: item } = trpc.shop.getItemsById.useQuery(id);
   console.log(item);
-  let colorRegex = /^(\w+.\s)*\-|(\/\s\w+)$/gim;
-  let sizeRegex = /^(\w+.\s)*\-\s(\w+.)*\//gim;
+  const colorRegex = /^(\w+.\s)*\-|(\/\s\w+)$/gim;
+  const sizeRegex = /^(\w+.\s)*\-\s(\w+.)*\//gim;
   const [showOptions, setShowOptions] = useState(false);
   const [color, setColor] = useState("");
   const [colorOptions, setColorOptions] = useState<Array<string>>([]);
@@ -97,7 +96,7 @@ const CardOverlay: React.FC<CardOverlay> = ({ togglePopup, popup, id }) => {
     if (color === "") {
       setColor(item?.sync_variants[0].name.replace(colorRegex, ""));
     }
-    let colorSet = new Set(
+    const colorSet = new Set(
       item?.sync_variants.map((v: SyncVariant) =>
         v.name.replace(colorRegex, "")
       )
@@ -105,10 +104,10 @@ const CardOverlay: React.FC<CardOverlay> = ({ togglePopup, popup, id }) => {
     setColorOptions([...colorSet] as string[]);
   }, [item]);
 
-  const { mutateAsync: buyNow } = trpc.shop.buyNow.useMutation();
   const { mutateAsync: createUser, data: guestUser } =
     trpc.auth.createGuestUser.useMutation();
-  const { data: userDetails, isError } = trpc.auth.getUserDetails.useQuery();
+  const { data: userDetails, isError } =
+    trpc.auth.getUserDetails.useQuery() as any;
   //Move this to api call for after stripe process is completed
   const addToCart = useCart((s) => s.addToCart);
   const handleBuy = async () => {
@@ -125,7 +124,7 @@ const CardOverlay: React.FC<CardOverlay> = ({ togglePopup, popup, id }) => {
     togglePopup(false);
   };
   useEffect(() => {
-    setRecipient(userDetails);
+    setRecipient(userDetails as Recipient);
   });
   useEffect(() => {
     console.log(guestUser);
@@ -190,10 +189,11 @@ const CardOverlay: React.FC<CardOverlay> = ({ togglePopup, popup, id }) => {
                   (v: SyncVariant) => v.name.replace(colorRegex, "") === color
                 )
                 .map((v: SyncVariant) => {
-                  let lsize = v.name?.replace(sizeRegex, "");
+                  const lsize = v.name?.replace(sizeRegex, "");
                   if (v.main_category_id === 55) {
                     return (
                       <div
+                        key={v.id + "55"}
                         onClick={() => {
                           setSize(lsize);
                           setVariant(v);
@@ -212,6 +212,7 @@ const CardOverlay: React.FC<CardOverlay> = ({ togglePopup, popup, id }) => {
                   if (v.main_category_id === 24 || 29) {
                     return (
                       <div
+                        key={v.id + "24 29"}
                         onClick={() => {
                           setSize(lsize);
                           setVariant(v);
@@ -227,6 +228,7 @@ const CardOverlay: React.FC<CardOverlay> = ({ togglePopup, popup, id }) => {
                   if (v.main_category_id === 27) {
                     return (
                       <div
+                        key={v.id + "27"}
                         onClick={() => {
                           setSize(lsize);
                           setVariant(v);

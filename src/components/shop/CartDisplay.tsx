@@ -5,6 +5,7 @@ import { trpc } from "../../utils/trpc";
 import AddressFormGuest from "../account/AddressFormGuest";
 import CartCheckout from "./CartCheckout";
 import { useCart } from "./CartStore";
+import { Recipient } from "./ShopDisplay";
 
 const CartDisplay: React.FC<{ cart: Array<SyncVariant>; setCartOpen: any }> = ({
   cart,
@@ -29,14 +30,14 @@ const CartDisplay: React.FC<{ cart: Array<SyncVariant>; setCartOpen: any }> = ({
   useEffect(() => {
     if (guestUserResponse) {
       setGuestUser(guestUserResponse.user);
-      setAddress(guestUserResponse.address);
+      setAddress(guestUserResponse.address as Recipient);
     }
   }, [guestUserResponse]);
-  const { data: userAddress } = trpc.auth.getUserDetails.useQuery();
+  const { data: userAddress } = trpc.auth.getUserDetails.useQuery() as any;
   useEffect(() => {
-    if (userAddress) {
-      setGuestUser(userAddress.user);
-      setAddress(userAddress);
+    if (userAddress !== null) {
+      setGuestUser(userAddress?.user);
+      setAddress(userAddress as Recipient);
     }
   }, [userAddress]);
   console.log(userAddress);
@@ -92,7 +93,10 @@ const CartItemDisplay: React.FC<any> = ({ cart }) => {
   return (
     <>
       {cart.map((item: SyncVariant, i: number) => (
-        <div className="w-full rounded-md bg-zinc-300 bg-opacity-30 p-2">
+        <div
+          key={item.id + "cartDisplay"}
+          className="w-full rounded-md bg-zinc-300 bg-opacity-30 p-2"
+        >
           <div>{item.name}</div>
           <div className="flex place-content-center place-items-center gap-4">
             <img

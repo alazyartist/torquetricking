@@ -1,6 +1,6 @@
 import { MdClose } from "react-icons/md";
 import React, { FormEvent, useEffect, useState } from "react";
-import { FaAddressCard, FaCheckCircle } from "react-icons/fa";
+import { FaCheckCircle } from "react-icons/fa";
 
 import { trpc } from "../../utils/trpc";
 import { Recipient } from "../shop/ShopDisplay";
@@ -126,7 +126,9 @@ const AddressForm: React.FC<any> = ({ showAddress }) => {
           >
             {states &&
               states?.map((option: { code: string; name: string }) => (
-                <option value={option.code}>{option.name}</option>
+                <option key={option.code} value={option.code}>
+                  {option.name}
+                </option>
               ))}
           </select>
         </label>
@@ -146,7 +148,9 @@ const AddressForm: React.FC<any> = ({ showAddress }) => {
             {countryCodes &&
               countryCodes?.result?.map(
                 (option: { code: string; name: string }) => (
-                  <option value={option.code}>{option.name}</option>
+                  <option key={option.code} value={option.code}>
+                    {option.name}
+                  </option>
                 )
               )}
           </select>

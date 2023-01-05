@@ -23,12 +23,12 @@ const OrderDetails = () => {
       <div className="flex flex-col gap-2">
         {userOrders &&
           userOrders
-            ?.sort((a: OrderDetails, b: OrderDetails) => {
+            ?.sort((a: any, b: any): any => {
               a.createdAt > b.createdAt ? -1 : 1;
             })
-            .filter((order: OrderDetails) => order.printful_id !== null)
-            .map((order: OrderDetails) => (
-              <IndividualOrder key={order.id} order={order as OrderDetails} />
+            .filter((order: any) => order.printful_id !== null)
+            .map((order: any) => (
+              <IndividualOrder key={order.id} order={order} />
             ))}
       </div>
     </div>
@@ -60,7 +60,10 @@ const IndividualOrder = ({ order }: any) => {
         </div>
         {showMore &&
           order.cart?.map((item: SyncVariant) => (
-            <div className="flex w-full place-content-start place-items-center gap-2 p-2">
+            <div
+              key={item.id + "cart"}
+              className="flex w-full place-content-start place-items-center gap-2 p-2"
+            >
               <div>
                 <img
                   className="rounded-md"

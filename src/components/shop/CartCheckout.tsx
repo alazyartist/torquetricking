@@ -18,11 +18,11 @@ const CartCheckout: React.FC<CartProps> = ({
   toggleCheckout,
   setCartOpen,
 }) => {
-  let subtotal = cart
-    .map((item) => parseFloat(item.retail_price))
-    .reduce((sum, b) => sum + b, 0);
-  console.log(user_id);
-  let cartTotal = estimate?.retail_costs?.total || 0;
+  //   const subtotal = cart
+  //     .map((item) => parseFloat(item.retail_price))
+  //     .reduce((sum, b) => sum + b, 0);
+  //   console.log(user_id);
+  const cartTotal = estimate?.retail_costs?.total || 0;
   return (
     <div className="fixed top-0 left-0 flex h-screen w-screen flex-col overflow-y-scroll bg-zinc-900 text-zinc-300">
       {recipient && (

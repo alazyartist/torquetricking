@@ -9,7 +9,7 @@ export const authRouter = router({
   }),
   getUserDetails: protectedProcedure.query(async ({ ctx }) => {
     return await ctx.prisma.address.findUnique({
-      where: { email: ctx.session.user.email },
+      where: { email: ctx.session.user.email as string },
       include: { user: true },
     });
   }),
@@ -24,7 +24,7 @@ export const authRouter = router({
       console.log(input);
       console.log(ctx.session.user.email);
       return ctx.prisma.address.upsert({
-        where: { email: ctx.session.user.email },
+        where: { email: ctx.session.user.email as string },
         update: {
           name: input.name,
           address1: input.address1,
@@ -37,7 +37,7 @@ export const authRouter = router({
           zip: input.zip,
         },
         create: {
-          email: ctx.session.user.email,
+          email: ctx.session.user.email as string,
           name: input.name,
           address1: input.address1,
           address2: input.address2,
@@ -70,7 +70,7 @@ export const authRouter = router({
       }
 
       console.log(user);
-      let updateAddress = await ctx.prisma.address.upsert({
+      const updateAddress = await ctx.prisma.address.upsert({
         where: { email: input.email },
         update: {
           name: input.name,
