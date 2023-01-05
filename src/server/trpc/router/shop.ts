@@ -49,13 +49,13 @@ export const shopRouter = router({
       try {
         const checkoutSession = await stripe.paymentIntents.create({
           currency: "usd",
-          amount: input.amount * 100,
+          amount: Math.ceil(input.amount * 100),
           automatic_payment_methods: {
             enabled: true,
           },
           metadata: {
             user_id: input.user_id,
-            amount: input.amount,
+            amount: Math.ceil(input.amount),
             products: JSON.stringify(input.cart?.map((item) => item.id)),
           },
         });

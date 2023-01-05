@@ -6,6 +6,7 @@ import { createContext } from "../../../server/trpc/context";
 
 import { appRouter } from "../../../server/trpc/router/_app";
 import { mailer } from "../../../utils/nodemailer";
+import { SyncVariant } from "../../../types/SyncVariant.js";
 const stripe = new Stripe(env.STRIPE_SECRET_KEY, { apiVersion: "2022-11-15" });
 const endpointSecret = env.STRIPE_WEBHOOK_SECRET;
 export const config = {
@@ -83,19 +84,11 @@ export default async function webhookHandler(
           from: "torquetricking@gmail.com",
           subject: `Thanks for your purchase - Order ${orderDetails?.order.id}`,
           html: html(orderDetails),
-          attachments: [
-            {
-              filename: "product.png",
-              cid: "product_image",
-              path: orderDetails.order.cart.files[
-                orderDetails.order.cart.files.length - 1
-              ].preview_url,
-            },
-          ],
         });
 
-      //TODO add nodemailer fulfilment
-      // ... handle other event types
+        //TODO add nodemailer fulfilment
+        // ... handle other event types
+        break;
       default:
         console.log(`Unhandled event type ${event.type}`);
     }
@@ -113,13 +106,14 @@ export default async function webhookHandler(
   res.status(200).send("");
 }
 
-function html(orderDetails) {
+function html(orderDetails: any) {
   console.log("htmlOrderEmail", orderDetails);
   let { user, order } = orderDetails;
   console.log(
     "htmlOrderPreview",
-    orderDetails.order.cart.map(item=>item.files[item.files.length - 1]
-      .preview_url
+    orderDetails.order.cart.map(
+      (item: any) => item.files[item.files.length - 1].preview_url
+    )
   );
   const brandColor = "#06b6d4";
   const color = {
@@ -154,12 +148,16 @@ function html(orderDetails) {
     </h1>
     
     <div style="display:flex gap:4px">
-      <p>
+      <div>
       You ordered:<br/>
-        ${order.cart.name}<br/>
+      ${order.cart.map(
+        (item: SyncVariant) =>
+          `<div>
+        <p>${item.name}${"  "}${item.retail_price}</p>
+        </div>`
+      )}
         ${order.amount}$</br>
         ${order.shipping} Shipping</br>
-      </p>
       <p>Your Order will be shipped to</p>
       <p>${user.address.name}<br/>
             ${user.address.address1}<br/>
@@ -173,14 +171,15 @@ function html(orderDetails) {
     <tr>
       <td align="center" style="padding: 20px 0;">
         <table border="0" cellspacing="0" cellpadding="0">
-        <tr>
-       {order.cart.map(item)=>
-         <td>
+     ${order.cart.map(
+       (item: any) => `<tr>
+        <td>
         <img src="${
-         item.files[item.files.length - 1].preview_url
+          item.files[item.files.length - 1].preview_url
         }" alt="Product image" />
-        </td>}
-        </tr>
+        </td>
+        </tr>`
+     )}
           <tr>
             <td align="center" style="border-radius: 5px;" bgcolor="${
               color.buttonBackground
