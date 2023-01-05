@@ -23,6 +23,64 @@ export const shopRouter = router({
   getSecretKey: publicProcedure.query(async () => {
     return env.STRIPE_PUBLIC_KEY;
   }),
+  estimateCart: publicProcedure
+    .input(z.object({ recipient: z.any(), items: z.array(z.any()) }))
+    .mutation(async ({ input, ctx }) => {
+      try {
+        const estimate = await printfulApi.post("/orders/estimate-costs", {
+          recipient: input.recipient,
+          items: input.items,
+        });
+        console.log(estimate);
+        return { estimate };
+      } catch (err) {
+        console.log(err);
+      }
+    }),
+  createCheckoutSession: publicProcedure
+    .input(
+      z.object({
+        user_id: z.string(),
+        cart: z.array(z.any()),
+        amount: z.number(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      try {
+        const checkoutSession = await stripe.paymentIntents.create({
+          currency: "usd",
+          amount: input.amount * 100,
+          automatic_payment_methods: {
+            enabled: true,
+          },
+          metadata: {
+            user_id: input.user_id,
+            amount: input.amount,
+            products: JSON.stringify(input.cart?.map((item) => item.id)),
+          },
+        });
+
+        const checkoutOrderDetails = await ctx.prisma.user.update({
+          where: { id: input.user_id },
+          data: {
+            orders: {
+              create: {
+                paymentIntent: checkoutSession.id,
+                amount: input.amount,
+                cart: input.cart,
+                shipping: "STANDARD",
+              },
+            },
+          },
+          include: { orders: true },
+        });
+
+        console.log(checkoutOrderDetails);
+        return { clientSecret: checkoutSession.client_secret };
+      } catch (err) {
+        console.log(err);
+      }
+    }),
   createPaymentIntent: publicProcedure
     .input(
       z.object({
@@ -56,7 +114,7 @@ export const shopRouter = router({
               create: {
                 paymentIntent: paymentIntent.id,
                 amount: input.amount,
-                cart: input.product,
+                cart: [input.product],
                 shipping: input.shipping,
               },
             },

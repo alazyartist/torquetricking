@@ -120,12 +120,16 @@ const CardOverlay: React.FC<CardOverlay> = ({ togglePopup, popup, id }) => {
 
     // console.log("Buying Product", userDetails, variant, color, size);
   };
+  const handleAddToCart = (variant: SyncVariant) => {
+    addToCart(variant);
+    togglePopup(false);
+  };
   useEffect(() => {
     setRecipient(userDetails);
   });
   useEffect(() => {
     console.log(guestUser);
-  }, [guestUser]);
+  }, [guestUser, variant]);
   return (
     <div className="no-scrollbar fixed top-[2.5vh] left-[2.5vw] z-20 flex h-[95vh] w-[95vw] flex-col items-center overflow-y-auto rounded-md bg-zinc-900 bg-opacity-80 p-2 text-zinc-300 drop-shadow-2xl ">
       {!showForm ? (
@@ -255,15 +259,17 @@ const CardOverlay: React.FC<CardOverlay> = ({ togglePopup, popup, id }) => {
               onClick={() => handleBuy()}
               className=" col-start-3 m-2 rounded-md bg-emerald-500 p-2 shadow-md shadow-emerald-600"
             >
-              Buy Now
+              {total === "NaN" ? "Select Options" : "Buy Now"}
             </button>
-            <button
-              disabled={!variant}
-              onClick={() => addToCart(variant as SyncVariant)}
-              className=" col-start-3 m-2 rounded-md bg-emerald-500 p-2 shadow-md shadow-emerald-600"
-            >
-              Add To Cart{" "}
-            </button>
+            {variant && (
+              <button
+                disabled={!variant}
+                onClick={() => handleAddToCart(variant as SyncVariant)}
+                className=" col-start-3 m-2 rounded-md bg-emerald-500 p-2 shadow-md shadow-emerald-600"
+              >
+                Add To Cart{" "}
+              </button>
+            )}
           </div>
         </>
       ) : (

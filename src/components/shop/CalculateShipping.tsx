@@ -91,8 +91,9 @@ const CalculateShipping: React.FC<CalculateShippingProps> = ({
                 onClick={() => signIn()}
                 className="w-full rounded-md bg-zinc-300 bg-opacity-30 p-1 text-center text-zinc-300"
               >
-                Sign in to see Shipping Costs
+                Sign In
               </button>
+              <p className="w-full text-center text-xs">or</p>
               <button
                 onClick={() => setOpenAddressForm(!openAddressForm)}
                 className="w-full rounded-md bg-zinc-300 bg-opacity-30 p-1 text-center text-zinc-300"
@@ -113,7 +114,7 @@ const CalculateShipping: React.FC<CalculateShippingProps> = ({
           )}
         </div>
         {openAddressForm && (
-          <div className="absolute top-[0] left-[0] h-[95vh] w-[95vw] bg-zinc-900 p-2 text-zinc-300 ">
+          <div className="absolute top-[0] left-[0] h-[95vh] w-[95vw] bg-zinc-900 p-2 text-xs text-zinc-300 md:text-lg ">
             <AddressFormGuest
               createUser={createUser}
               showAddress={setOpenAddressForm}
