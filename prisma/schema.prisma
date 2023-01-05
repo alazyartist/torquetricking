@@ -65,7 +65,7 @@ model Orders{
   paymentIntent String @unique
   shipping      String @default("STANDARD")
   printful_id   String?
-  amount        Int
+  amount        Float
   cart          Json @db.Json 
   createdAt     DateTime @default(now())
 
