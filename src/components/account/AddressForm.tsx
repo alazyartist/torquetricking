@@ -42,8 +42,18 @@ const AddressForm: React.FC<any> = ({ showAddress }) => {
       document.getElementById("country").value = userDetails?.country_code;
     }
   }, [userDetails]);
+
+  const disableSave =
+    address.email === "" ||
+    address.address1 === "" ||
+    address.name === "" ||
+    address.city === "" ||
+    address.state_code === "" ||
+    address.state_name === "" ||
+    address.zip === "" ||
+    address.country_code === "";
   return (
-    <div className="w-full md:w-[30vw]">
+    <div className="fixed top-0 left-0 z-[100] w-full overflow-y-scroll bg-zinc-800 bg-opacity-90 p-4 md:w-[30vw]">
       <form
         onSubmit={handleSubmit}
         className="flex flex-col gap-2 text-zinc-900"
@@ -57,21 +67,21 @@ const AddressForm: React.FC<any> = ({ showAddress }) => {
         {status === "error" && (
           <MdClose className="place-self-center fill-red-500 text-5xl" />
         )}
-        <label className="flex flex-col">
+        <label className="flex flex-col text-zinc-300">
           Name
           <input
             autoComplete="name"
-            className="rounded-md bg-opacity-30 p-2"
+            className="rounded-md bg-opacity-30 p-2 text-zinc-900"
             type={"text"}
             value={address?.name}
             onChange={(e) => setAddress({ ...address, name: e.target.value })}
           />
         </label>
-        <label className="flex flex-col">
+        <label className="flex flex-col text-zinc-300">
           Address <span className="text-xs">line-1</span>
           <input
             autoComplete="address-line1"
-            className="rounded-md bg-opacity-30 p-2"
+            className="rounded-md bg-opacity-30 p-2 text-zinc-900"
             type={"text"}
             value={address?.address1}
             onChange={(e) =>
@@ -79,11 +89,11 @@ const AddressForm: React.FC<any> = ({ showAddress }) => {
             }
           />
         </label>
-        <label className="flex flex-col">
+        <label className="flex flex-col text-zinc-300">
           Address
           <input
             autoComplete="address-line2"
-            className="rounded-md bg-opacity-30 p-2"
+            className="rounded-md bg-opacity-30 p-2 text-zinc-900"
             type={"text"}
             value={address?.address2}
             onChange={(e) =>
@@ -91,30 +101,41 @@ const AddressForm: React.FC<any> = ({ showAddress }) => {
             }
           />
         </label>
-        <label className="flex flex-col">
+        <label className="flex flex-col text-zinc-300">
           City
           <input
-            className="rounded-md bg-opacity-30 p-2"
-            type={"text"}
+            className="rounded-md bg-opacity-30 p-2 text-zinc-900"
+            type={"text "}
             value={address?.city}
             onChange={(e) => setAddress({ ...address, city: e.target.value })}
           />
         </label>
 
-        <label className="flex flex-col">
+        <label className="flex flex-col text-zinc-300">
           Zip Code
           <input
-            className="rounded-md bg-opacity-30 p-2"
-            type={"text"}
+            className="rounded-md bg-opacity-30 p-2 text-zinc-900"
+            type={"text "}
             value={address?.zip}
             onChange={(e) => setAddress({ ...address, zip: e.target.value })}
           />
         </label>
+        <label className="flex flex-col text-zinc-300">
+          State Name
+          <input
+            className="rounded-md bg-opacity-30 p-2 text-zinc-900"
+            type={"text "}
+            value={address?.state_name}
+            onChange={(e) =>
+              setAddress({ ...address, state_name: e.target.value })
+            }
+          />
+        </label>
 
-        <label className="flex flex-col">
-          State
+        <label className="flex flex-col text-zinc-300">
+          State Code
           <select
-            className="rounded-md bg-opacity-30 p-2"
+            className="rounded-md p-2"
             id="stateDropdown"
             onChange={(e) => {
               setAddress({
@@ -132,7 +153,7 @@ const AddressForm: React.FC<any> = ({ showAddress }) => {
               ))}
           </select>
         </label>
-        <label className="flex flex-col">
+        <label className="flex flex-col text-zinc-300">
           Country
           <select
             className="rounded-md bg-opacity-30 p-2"
@@ -156,7 +177,10 @@ const AddressForm: React.FC<any> = ({ showAddress }) => {
           </select>
         </label>
         <button
-          className="w-fit place-self-center rounded-xl bg-zinc-800 px-4 py-2 text-2xl text-zinc-200"
+          disabled={disableSave}
+          className={`w-fit place-self-center rounded-xl bg-zinc-800 px-4 py-2 text-2xl text-zinc-200 ${
+            disableSave ? "bg-zinc-800" : "bg-emerald-500"
+          }`}
           type="submit"
         >
           Save
