@@ -3,7 +3,7 @@ import Stripe from "stripe";
 import { env } from "../../../env/server.mjs";
 import { buffer } from "micro";
 import { createContext } from "../../../server/trpc/context";
-import { prisma } from "../../../server/db/client.js";
+import { prisma } from "../../../server/db/client";
 import { appRouter } from "../../../server/trpc/router/_app";
 import { mailer } from "../../../utils/nodemailer";
 import { SyncVariant } from "../../../types/SyncVariant.js";
